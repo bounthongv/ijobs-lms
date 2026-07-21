@@ -1,7 +1,8 @@
 
 <?php
 if (!defined('BASE_URL')) {
-    define('BASE_URL', 'https://job.apis.com.la/file/korea/');
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    define('BASE_URL', $protocol . '://' . $_SERVER['HTTP_HOST'] . '/file/korea/');
     // define('BASE_URL', 'http://localhost:81/project_person_card/file/');
 }
 
