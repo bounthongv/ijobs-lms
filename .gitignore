@@ -1,0 +1,7 @@
+connect.php
+*.bak
+*.sql
+*.log
+*.tmp
+*~
+*.swp
