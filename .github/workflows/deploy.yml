@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /var/www/job
+            cd /opt/job
             git pull origin master
             bash /root/fix-job-connect.sh
             docker compose -f docker-compose.job.yml up --build -d
