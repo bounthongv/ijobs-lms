@@ -21,6 +21,7 @@ jobs:
             whoami
             echo "HOSTNAME=$(hostname)"
             cd /opt/job || echo "DIR_NOT_FOUND"
-            git pull origin master 2>&1 || echo "GIT_PULL_FAILED"
+            git fetch origin 2>&1
+            git reset --hard origin/master 2>&1
             bash /root/fix-job-connect.sh 2>&1 || echo "FIX_SCRIPT_FAILED"
             docker compose -f docker-compose.job.yml up --build -d 2>&1 || echo "DOCKER_FAILED"
