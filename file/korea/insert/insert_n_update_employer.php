@@ -12,6 +12,7 @@
     $emp_name_eng = $_POST['emp_name_eng'] ?? '';
     $emp_com = $_POST['emp_com'] ?? '';
     $location = $_POST['location'] ?? '';
+    $emp_address = $_POST['emp_address'] ?? '';
     $emp_phone = $_POST['emp_phone'] ?? '';
     $emp_email = $_POST['emp_email'] ?? '';
     $prok_id = $_POST['prok_id'] ?? '';
@@ -23,9 +24,9 @@
     // ຖ້າກໍາລັງ insert ໃໝ່
     if($sub == 'insert'){
         try {
-            $insert = $conn->prepare("INSERT INTO employer(emp_id,bus_type, emp_name, emp_com, location, emp_phone, emp_email, prok_id, disk_id, emp_code,emp_name_eng) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            $insert = $conn->prepare("INSERT INTO employer(emp_id,bus_type, emp_name, emp_com, location, emp_phone, emp_email, prok_id, disk_id, emp_code,emp_name_eng,emp_address) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             
-            if($insert->execute([$emp_id,$bus_type, $emp_name, $emp_com, $location, $emp_phone, $emp_email, $prok_id, $disk_id, $emp_code,$emp_name_eng])){
+            if($insert->execute([$emp_id,$bus_type, $emp_name, $emp_com, $location, $emp_phone, $emp_email, $prok_id, $disk_id, $emp_code,$emp_name_eng,$emp_address])){
                 echo json_encode([
                     'message' => 'ບັນທືກຂໍ້ມູນສຳເລັດ',
                     'sts' => 'success'
@@ -55,9 +56,9 @@
             // ກຳນົດວັນທີອັບເດດ
             $date_updated = date('Y-m-d H:i:s');
             
-            $update = $conn->prepare("UPDATE employer SET bus_type=?, emp_name=?, emp_com=?, location=?, emp_phone=?, emp_email=?, prok_id=?, disk_id=?, emp_code=?,emp_name_eng = ? WHERE emp_id=?");
+            $update = $conn->prepare("UPDATE employer SET bus_type=?, emp_name=?, emp_com=?, location=?, emp_phone=?, emp_email=?, prok_id=?, disk_id=?, emp_code=?,emp_name_eng = ?,emp_address = ? WHERE emp_id=?");
             
-            if($update->execute([$bus_type, $emp_name, $emp_com, $location, $emp_phone, $emp_email, $prok_id, $disk_id, $emp_code,$emp_name_eng, $emp_id])){
+            if($update->execute([$bus_type, $emp_name, $emp_com, $location, $emp_phone, $emp_email, $prok_id, $disk_id, $emp_code,$emp_name_eng, $emp_address, $emp_id])){
                 echo json_encode([
                     'message' => 'ແກ້ໄຂຂໍ້ມູນສຳເລັດ',
                     'sts' => 'success'

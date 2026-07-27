@@ -152,6 +152,7 @@ $(document).ready(function () {
         e.preventDefault();
         let formData = new FormData(this);
         formData.append("sub",'update');
+        formData.append("sts_tb",'vacancy');
         if($("#heal_sts").val() == 'Pass'){
             formData.append("diagnose",'(ປົກກະຕິ)')
         }
@@ -402,6 +403,67 @@ $(document).ready(function () {
                     showToast(response.message, 'success');
                     setTimeout(function() {
                         location.reload();
+                    }, 2000);
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
+    $("#verify_vacancy").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#edit_vacancy")[0];
+        let formData = new FormData(form);
+        formData.append("sub",'update');
+        formData.append("sts_save",'Verify');
+        formData.append("sts_tb",'data_entry_korea');
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_vacancy.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                    setTimeout(function() {
+                        location = '../list_vacancy.php';
+                    }, 2000);
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
+    $("#approve_data").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#edit_data")[0];
+        let formData = new FormData(form);
+        formData.append("sub",'update');
+        formData.append("sts_data",'Approve');
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_data_entry.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                    setTimeout(function() {
+                        location = '../list_data_entry.php';
                     }, 2000);
                 }
                 

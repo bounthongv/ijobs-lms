@@ -36,15 +36,18 @@
           <label class="form-label">Company Name</label>
           <input type="text" name="emp_com" class="form-control-custom">
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Location</label>
-          <input type="text" name="location" class="form-control-custom" >
-        </div>
         
         <div class="form-group">
           <label class="form-label">Phone NO</label>
           <input type="text" name="emp_phone" class="form-control-custom">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input type="text" name="emp_address" class="form-control-custom" >
+        </div>
+        <div class="form-group">
+          <label class="form-label">Work Location</label>
+          <input type="text" name="location" class="form-control-custom" >
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>

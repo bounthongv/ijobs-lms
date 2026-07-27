@@ -926,11 +926,19 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="d-flex justify-content-end gap-2 px-3 py-2 border-top" style="background:#fafcfa;border-color:var(--green-border)!important;">
         <a href="../list_vacancy.php" class="btn btn-sm btn-outline-secondary px-4">
-            <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
-        </a>
-        <button type="submit" class="btn btn-sm btn-primary px-4">
-            <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
-        </button>
+                <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
+            </a>
+        <?php if($row['sts_save'] == 'Approve'): ?>
+        <?php else: ?>
+            <button type="button" id="verify_vacancy" class="btn btn-sm btn-warning px-4">
+                <i class="bi bi-patch-check-fill me-1"></i> Verify
+            </button>
+            
+            <button type="submit" class="btn btn-sm btn-primary px-4">
+                <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
+            </button>
+        <?php endif ?>
+        
     </div>
 
 </form>

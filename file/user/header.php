@@ -1,10 +1,8 @@
 <?php 
   include_once('../check.php');
   if (!defined('BASE_URLS')) {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'];
-    define('BASE_URLS', $protocol . '://' . $host . '/file/');
-    define('BASE_URLSS', $protocol . '://' . $host . '/file/user/');
+    define('BASE_URLS', 'https://job.apis.com.la/file/');
+    define('BASE_URLSS', 'https://job.apis.com.la/file/user/');
   }
 ?>
 <!DOCTYPE html>

@@ -37,14 +37,19 @@
           <input type="text" name="emp_com" id="edit_emp_com" class="form-control-custom">
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Location</label>
-          <input type="text" name="location" id="edit_location" class="form-control-custom" >
-        </div>
+        
         
         <div class="form-group">
           <label class="form-label">Phone NO</label>
           <input type="text" name="emp_phone" id="edit_emp_phone" class="form-control-custom">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input type="text" name="emp_address" id="edit_emp_address" class="form-control-custom" >
+        </div>
+        <div class="form-group">
+          <label class="form-label">Work Location</label>
+          <input type="text" name="location" id="edit_location" class="form-control-custom" >
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
@@ -118,6 +123,7 @@ function openModalEdit(empData) {
     document.getElementById('edit_emp_name_eng').value = empData.emp_name_eng || '';
     document.getElementById('edit_emp_com').value = empData.emp_com || '';
     document.getElementById('edit_location').value = empData.location || '';
+    document.getElementById('edit_emp_address').value = empData.emp_address || '';
     document.getElementById('edit_emp_phone').value = empData.emp_phone || '';
     document.getElementById('edit_emp_email').value = empData.emp_email || '';
     document.getElementById('edit_prok_id').value = empData.prok_id || '';

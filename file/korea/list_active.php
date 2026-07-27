@@ -24,6 +24,10 @@ if($type == 'Date Of Birth'){
     $p7 = "AND dob BETWEEN '$date1' AND '$date2' ";
 }else if($type == 'Interview Date'){
     $p7 = "AND interview_date BETWEEN '$date1' AND '$date2' ";
+}else if($type == 'Date of travel'){
+    $p7 = "AND dep_date BETWEEN '$date1' AND '$date2' ";
+}else if($type == 'Date of Comback'){
+    $p7 = "AND comback_date BETWEEN '$date1' AND '$date2' ";
 }
 // ພາກສ່ວນການປ່ຽນໜ້າ
 $limit = 500;
@@ -37,14 +41,8 @@ dis.dis_name_lao as dis_name_lao,
 vill.vill_name_lao as vill_name_lao,
 pro.pro_id as pro_id,
 dis.dis_id as dis_id,
-vill.vill_id as vill_id,
--- ບ່ອນເກີດ
-pro_b.pro_name_lao as pro_name_b,
-dis_b.dis_name_lao as dis_name_b,
-vill_b.vill_name_lao as vill_name_b,
-data.pro_id_b,
-data.dis_id_b,
-data.vill_id_b
+vill.vill_id as vill_id
+
 FROM data_entry_korea as data
 LEFT JOIN province as pro ON data.pro_id=pro.pro_id
 LEFT JOIN district as dis ON data.dis_id=dis.dis_id
@@ -53,12 +51,14 @@ LEFT JOIN village as vill ON data.vill_id=vill.vill_id
 LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id 
+INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
 WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7
 ORDER BY id ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
 $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
+INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
 WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
@@ -66,7 +66,9 @@ $total_pages = ceil($total_row['total'] / $limit);
 
 $num = $offset + 1;
 // total
-$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data 
+INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
+WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
@@ -87,7 +89,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; flex-wrap:wrap; gap:10px;">
     <div>
         <h5 style="font-size:19px; font-weight:700; color:#0f172a; margin:0;">
-            <i class="bi bi-card-checklist me-2 text-primary"></i> Data Entry List
+            <i class="bi bi-check-circle-fill me-2 text-primary"></i> Active List
         </h5>
     </div>
     <a href="form/data_entry_add.php" class="btn btn-primary btn-sm px-3 py-2"
@@ -98,7 +100,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <!-- ===== ຕາຕະລາງ User ===== -->
 <div class="dash-card">
     <div class="dash-card-title">
-        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Data Entry ທັງໝົດ
+        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Active ທັງໝົດ
         <span class="ms-auto badge fw-semibold"
             style="background:#eff6ff; color:#1d4ed8; font-size:12px;">
             <?= $total ?> ລາຍການ
@@ -164,6 +166,8 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                     <option value="">ເລືອກ</option>
                     <option value="Date Of Birth" <?= $type == 'Date Of Birth' ? 'selected' : '' ?>>Date Of Birth</option>
                     <option value="Interview Date" <?= $type == 'Interview Date' ? 'selected' : '' ?>>Interview Date</option>
+                    <option value="Date of travel" <?= $type == 'Date of travel' ? 'selected' : '' ?>>Date of travel</option>
+                    <option value="Date of Comback" <?= $type == 'Date of Comback' ? 'selected' : '' ?>>Date of Comback</option>
                 </select>
             </div>
             <div class="col-md-2 filter-group">
@@ -194,24 +198,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <th>ລຳດັບ</th>
                     <th style="width:100px;" class="text-center">ຈັດການ</th>
-                    <th>Status</th>
-                    <th>Certificate</th>
-                    <th>ໃບຢັ້ງຢືນທີ່ຢູ່</th>
-                    <th class="sortable">Picture</th>
-                    <th class="sortable">Passport</th>
-                    <th class="sortable">ໃບກະສິກອນ</th>
-                    <th class="sortable">Labor_contract</th>
-                    <th class="sortable">ຟອມສຳພາດ</th>
-                    <th class="sortable">ສຳມະໂນຄົວ</th>
-                    <th class="sortable">ຫຼັກຊັບຄ້ຳປະກັນ</th>
-                    <th>ສົ່ງເອກະສານ</th>
+                    <th class="sortable">Id</th>
                     <th class="sortable">Name&Surname</th>
                     <th class="sortable">Nickname</th>
                     <th class="sortable">Name&SurnameLao</th>
-                    <th class="sortable">Phone NO1</th>
-                    <th class="sortable">Phone NO2</th>
-                    <th class="sortable">Fam Phone NO</th>
-                    <th class="sortable">Nationality</th>
                     <th class="sortable">Date of birth </th>
                     <th class="sortable">Age</th>
                     <th class="sortable">Gender</th>
@@ -219,32 +209,32 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                     <th class="sortable">Height</th>
                     <th class="sortable">Shirt Size</th>
                     <th class="sortable">Status</th>
-                    <th class="sortable">Health_Check_Date</th>
-                    <th class="sortable">health_check</th>
                     <th class="sortable">Eng Village</th>
                     <th class="sortable">Lao Village</th>
-                    <th class="sortable">Birth Village</th>
                     <th class="sortable">Eng District</th>
                     <th class="sortable">Lao District</th>
-                    <th class="sortable">Birth District</th>
                     <th class="sortable">Eng Province</th>
                     <th class="sortable">Lao Province</th>
-                    <th class="sortable">Birth Province</th>
-                    <th class="sortable">Family book NO</th>
-                    <th class="sortable">Family book Date</th>
-                    <th class="sortable">Unit</th>
-                    <th class="sortable">Home NO</th>
-                    <th class="sortable">Interview Location</th>
                     <th class="sortable">Passport NO </th>
                     <th class="sortable">Issue Date</th>
                     <th class="sortable">Exp date</th>
                     <th class="sortable">Loan</th>
-                    <th class="sortable">Driver License</th>
-                    <th class="sortable">experience</th>
-                    <th class="sortable">Interview Name</th>
-                    <th class="sortable">ແຮງງານ ມີຕົວເລືອກ</th>
+                    <th class="sortable">Code Project</th>
+                    <th class="sortable">District in Korea</th>
+                    <th class="sortable">Province in Korea</th>
+                    <th class="sortable">Employer</th>
+                    <th class="sortable">Married couple</th>
+                    <th class="sortable">Date of travel (ວັນທີເດີນທາງ)</th>
+                    <th class="sortable">Date of Comback (ວັນທີຄາດວ່າຈະໄດ້ເດີນທາງກັບ)</th>
+                    <th class="sortable">Status Labor Contract</th>
+                    <th class="sortable">Number of months for contract renewal (ຈຳນວນເດືອນຕໍ່ສັນຍາ)</th>
+                    <th class="sortable">Status Of Visa (ສະຖານະວີຊ່າ)</th>
+                    <th class="sortable">Bank Acount</th>
+                    <th class="sortable">Feedback for Finance</th>
+                    <th class="sortable">ມີໜີ້ຄ້າງຈ່າຍບໍ່</th>
                     <th class="sortable">Remark</th>
-                    <th class="sortable">Interview Date</th>
+                    <th class="sortable">Status Of Labor</th>
+                    <th class="sortable">ປີ</th>
                 </tr>
             </thead>
             <tbody id="userTbody">
@@ -259,81 +249,13 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $num++; ?></td>
                             <td>
                                 <a href="form/data_entry_edit.php?id=<?= $row['id'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                                <!-- <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_data"><i class="bi bi-trash"></i></button> -->
+                                <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_data"><i class="bi bi-trash"></i></button>
                             </td>
-                            <td>
-                                <?php 
-                                    $text = '';
-                                    $colors = '';
-                                    if($row['sts_data'] == 'Approve'){
-                                        $text = 'Approve';
-                                        $colors = 'success';
-                                    }else if($row['sts_data'] == 'Pending' || $row['sts_data'] == ''){
-                                        $text = 'Pending';
-                                        $colors = 'warning text-light';
-                                    }
-                                ?>
-                                <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
-                            </td>
-                            <td><a href="print/print_certificate.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td><a href="print/print_address.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td>
-                                <?php if (!empty($row['profile'])): ?>
-                                    <a href="uploads/<?= $row['profile'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_passport'])): ?>
-                                    <a href="uploads/<?= $row['doc_passport'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_farmer_cert'])): ?>
-                                    <a href="uploads/<?= $row['doc_farmer_cert'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_labor_contract'])): ?>
-                                    <a href="uploads/<?= $row['doc_labor_contract'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['file_form'])): ?>
-                                    <a href="uploads/<?= $row['file_form'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_census'])): ?>
-                                    <a href="uploads/<?= $row['doc_census'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_collateral'])): ?>
-                                    <a href="uploads/<?= $row['doc_collateral'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td><?= htmlspecialchars($row['coll_sts'] ?? '') ?></td>
+                            
+                            <td><?= htmlspecialchars($row['data_id'] ?? '') ?></td>
                             <td><?= htmlspecialchars($full_name ?? '') ?></td>
                             <td><?= htmlspecialchars($row['nickname'] ?? '') ?></td>
                             <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['phone1'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['phone2'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['fam_phone'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['nationality'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['dob'] == null ? '' : date_format(date_create($row['dob']), 'd/m/Y')) ?></td>
                             <td><?= htmlspecialchars($row['age'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['gender'] ?? '') ?></td>
@@ -341,32 +263,32 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($row['height'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['shirt_size'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['heal_date'] == null ? '' : date_format(date_create($row['heal_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['heal_sts'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['vill_name'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name_b'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['dis_name'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['dis_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name_b'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['pro_name'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['pro_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_no'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_date'] == null ? '' : date_format(date_create($row['family_book_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['unit'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['home'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_location'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['passport'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['issue_date'] == null ? '' : date_format(date_create($row['issue_date']), 'd/m/Y')) ?></td>
                             <td><?= htmlspecialchars($row['exp_date'] == null ? '' : date_format(date_create($row['exp_date']), 'd/m/Y')) ?></td>
                             <td><?= htmlspecialchars($row['pay_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['driver'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['agricu'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['list_type'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['da_remark'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_date'] == null ? '' : date_format(date_create($row['interview_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['code'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['disk_id'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['prok_id'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['emp_id'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['couple'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dep_date'] == null ? '' : date_format(date_create($row['dep_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['comback_date'] == null ? '' : date_format(date_create($row['comback_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['sts_contract'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['nomfcr'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['sts_visa'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['bank_acc'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['fin_price'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['debt_price'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['labor_remark'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['sts_labor'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['years'] ?? '') ?></td>
                         </tr>
                     <?php endforeach; ?>
                 

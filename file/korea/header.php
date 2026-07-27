@@ -1,10 +1,8 @@
 <?php
   include_once __DIR__ . '/../check.php';
   if (!defined('BASE_URLS')) {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'];
-    define('BASE_URLS', $protocol . '://' . $host . '/file/');
-    define('BASE_URLSS', $protocol . '://' . $host . '/file/korea/');
+    define('BASE_URLS', 'https://job.apis.com.la/file/');
+    define('BASE_URLSS', 'https://job.apis.com.la/file/korea/');
   }
 ?>
 <!DOCTYPE html>
@@ -110,8 +108,8 @@
         <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu">
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_vacancy.php">Vacancy List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_data_entry.php">Data Entry List</a></li>
-          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_approval.php">Approval List</a></li>
-          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_labor.php">Customers List</a></li>
+          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_approved.php">Approved List</a></li>
+          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_active.php">Active List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>list_returned.php">Returned List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Quota List</a></li>
         </ul>

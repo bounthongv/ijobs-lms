@@ -219,6 +219,7 @@ $data = [
     "gua_vill"        => getPost("gua_vill"),
 
     "da_remark" => getPost("da_remark"),
+    "sts_data" => getPost("sts_data"),
 ];
 
 // ===================================================

@@ -53,20 +53,20 @@ LEFT JOIN village as vill ON data.vill_id=vill.vill_id
 LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id 
-WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7
+WHERE sts_tb = 'data_entry_korea' AND sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7
 ORDER BY id ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
 $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
-WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+WHERE sts_tb = 'data_entry_korea' AND sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
 $total_pages = ceil($total_row['total'] / $limit);
 
 $num = $offset + 1;
 // total
-$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data WHERE sts_tb = 'data_entry_korea' AND sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
@@ -87,18 +87,18 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; flex-wrap:wrap; gap:10px;">
     <div>
         <h5 style="font-size:19px; font-weight:700; color:#0f172a; margin:0;">
-            <i class="bi bi-card-checklist me-2 text-primary"></i> Data Entry List
+            <i class="bi bi-check-circle-fill me-2 text-primary"></i> Approved List
         </h5>
     </div>
-    <a href="form/data_entry_add.php" class="btn btn-primary btn-sm px-3 py-2"
+    <!-- <a href="form/data_entry_add.php" class="btn btn-primary btn-sm px-3 py-2"
         style="font-size:13px; font-weight:600; border-radius:8px;">
         <i class="bi bi-plus-lg me-1"></i> Add
-    </a>
+    </a> -->
 </div>
 <!-- ===== ຕາຕະລາງ User ===== -->
 <div class="dash-card">
     <div class="dash-card-title">
-        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Data Entry ທັງໝົດ
+        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Approved ທັງໝົດ
         <span class="ms-auto badge fw-semibold"
             style="background:#eff6ff; color:#1d4ed8; font-size:12px;">
             <?= $total ?> ລາຍການ
@@ -265,10 +265,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                 <?php 
                                     $text = '';
                                     $colors = '';
-                                    if($row['sts_data'] == 'Approve'){
+                                    if($row['sts_approve'] == 'Approve'){
                                         $text = 'Approve';
                                         $colors = 'success';
-                                    }else if($row['sts_data'] == 'Pending' || $row['sts_data'] == ''){
+                                    }else if($row['sts_approve'] == 'Pending' || $row['sts_approve'] == ''){
                                         $text = 'Pending';
                                         $colors = 'warning text-light';
                                     }

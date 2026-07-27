@@ -217,9 +217,10 @@ $data = [
     "gua_unit"        => getPost("gua_unit"),
     "gua_home"        => getPost("gua_home"),
     "gua_vill"        => getPost("gua_vill"),
-
+    "sts_save"        => getPost("sts_save"),
+    
     "da_remark" => getPost("da_remark"),
-    "sts_tb" => "vacancy",
+    "sts_tb"        => getPost("sts_tb"),
 ];
 
 // ===================================================

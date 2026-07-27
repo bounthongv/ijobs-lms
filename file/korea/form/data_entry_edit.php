@@ -928,6 +928,9 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         <a href="../list_data_entry.php" class="btn btn-sm btn-outline-secondary px-4">
             <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
         </a>
+        <button type="button" id="approve_data" class="btn btn-sm btn-success px-4">
+            <i class="bi bi-check-circle-fill me-1"></i> Approve
+        </button>
         <button type="submit" class="btn btn-sm btn-primary px-4">
             <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
         </button>

@@ -47,7 +47,7 @@ LEFT JOIN village as vill ON data.vill_id=vill.vill_id
 LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id 
-WHERE sts_tb = 'vacancy' $p1 $p2 $p3 $p4 $p5 $p6
+WHERE (sts_tb = 'vacancy' OR sts_save in('Verify','Pending','')) $p1 $p2 $p3 $p4 $p5 $p6
 ORDER BY id ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
@@ -188,16 +188,8 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <th>ລຳດັບ</th>
                     <th style="width:100px;" class="text-center">ຈັດການ</th>
-                    <!--<th>Certificate</th>
-                    <th>ໃບຢັ້ງຢືນທີ່ຢູ່</th>
-                     <th class="sortable">Picture</th>
-                    <th class="sortable">Passport</th>
-                    <th class="sortable">ໃບກະສິກອນ</th>
-                    <th class="sortable">Labor_contract</th>
-                    <th class="sortable">ຟອມສຳພາດ</th>
-                    <th class="sortable">ສຳມະໂນຄົວ</th>
-                    <th class="sortable">ຫຼັກຊັບຄ້ຳປະກັນ</th>
-                    <th>ສົ່ງເອກະສານ</th> -->
+                    <th class="sortable">ເລກທີລົງທະບຽນ</th>
+                    <th class="sortable">Status</th>
                     <th class="sortable">Name&Surname</th>
                     <th class="sortable">Nickname</th>
                     <th class="sortable">Name&SurnameLao</th>
@@ -252,60 +244,23 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $num++; ?></td>
                             <td>
                                 <a href="form/vacancy_edit.php?id=<?= $row['id'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                                <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_vacancy"><i class="bi bi-trash"></i></button>
+                                <!-- <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_vacancy"><i class="bi bi-trash"></i></button> -->
                             </td>
-                            <!-- <td><a href="print/print_certificate.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td><a href="print/print_address.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><?= htmlspecialchars($row['data_id'] ?? '') ?></td>
                             <td>
-                                <?php if (!empty($row['profile'])): ?>
-                                    <a href="uploads/<?= $row['profile'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
+                                <?php 
+                                    $text = '';
+                                    $colors = '';
+                                    if($row['sts_save'] == 'Verify'){
+                                        $text = 'Verify';
+                                        $colors = 'success';
+                                    }else if($row['sts_save'] == 'Pending' || $row['sts_save'] == ''){
+                                        $text = 'Pending';
+                                        $colors = 'warning text-light';
+                                    }
+                                ?>
+                                <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
                             </td>
-                            <td>
-                                <?php if (!empty($row['doc_passport'])): ?>
-                                    <a href="uploads/<?= $row['doc_passport'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_farmer_cert'])): ?>
-                                    <a href="uploads/<?= $row['doc_farmer_cert'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_labor_contract'])): ?>
-                                    <a href="uploads/<?= $row['doc_labor_contract'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['file_form'])): ?>
-                                    <a href="uploads/<?= $row['file_form'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_census'])): ?>
-                                    <a href="uploads/<?= $row['doc_census'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($row['doc_collateral'])): ?>
-                                    <a href="uploads/<?= $row['doc_collateral'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                            <td><?= htmlspecialchars($row['coll_sts'] ?? '') ?></td> -->
                             <td><?= htmlspecialchars($full_name ?? '') ?></td>
                             <td><?= htmlspecialchars($row['nickname'] ?? '') ?></td>
                             <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
