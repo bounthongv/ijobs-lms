@@ -1,8 +1,8 @@
 <?php
   include_once __DIR__ . '/../check.php';
   if (!defined('BASE_URLS')) {
-    define('BASE_URLS', 'https://job.apis.com.la/file/');
-    define('BASE_URLSS', 'https://job.apis.com.la/file/korea/');
+    define('BASE_URLS', '/file/');
+    define('BASE_URLSS', '/file/korea/');
   }
 ?>
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JOB</title>
+  <title>LMS</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     <div class="logo-icon">
       <i class="bi bi-briefcase-fill" style="color:#fff; font-size:18px;"></i>
     </div>
-    <div class="logo-title">JOB</div>
+    <div class="logo-title">LMS</div>
   
     <!-- ເສັ້ນຂັ້ນ -->
     <div class="logo-sep"></div>

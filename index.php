@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOB</title>
+    <title>LMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
+    <link rel="icon" href="logo/IjobsLogo.png">
 
  <!--    <link rel="stylesheet" href="style.css"> -->
 </head>
@@ -197,11 +198,10 @@
                     <path d="M12 2L2 22H22L12 2ZM12 15L16 7H8L12 15Z" fill="#007BFF"/>
                     <text x="12" y="20" font-size="6" fill="#007BFF" text-anchor="middle">APIS</text>
                 </svg> -->
-                <img src="logo/apis.JPG" class="apis-logo" alt="">
-                <h1>Welcome to Job MANAGEMENT SYSTEM</h1>
+                <img src="logo/IjobsLogo.png" class="apis-logo" alt="">
+                <h1>Welcome to LMS <br> Labor Management System</h1>
             </div>
 
-            <h6 class="text-center">Designed By: APIS Company Limited</h6>
 
             <form action="#" id="go" method="POST">
                 <div class="form-group">
