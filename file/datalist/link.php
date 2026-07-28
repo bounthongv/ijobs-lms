@@ -1,7 +1,7 @@
 
 <?php
 if (!defined('BASE_URL')) {
-    define('BASE_URL', 'https://job.apis.com.la/file/datalist/');
+    define('BASE_URL', '/file/datalist/');
     // define('BASE_URL', 'http://localhost:81/project_person_card/file/');
 }
 

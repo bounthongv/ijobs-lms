@@ -5,6 +5,6 @@
     unset($_SESSION['checked']);
     unset($_SESSION['status']);
     session_destroy();
-    header("Location:https://job.apis.com.la/");
+    header("Location:/");
     exit();
 ?>
