@@ -1,7 +1,40 @@
 <?php 
   include_once('../check.php'); 
   include_once('header.php'); 
+if($_SESSION['status'] != 'Admin'){
+        ?>
+        <!DOCTYPE html>
+        <html lang="lo">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
 
+            * {
+                font-family: "Noto Sans Lao", serif;
+            }
+        </style>
+        <body>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "ການເຂົ້າເຖິງຖືກປະຕິເສດ",
+                    text: "ທ່ານບໍ່ມີສິດເຂົ້າໃຊ້ໜ້ານີ້",
+                    confirmButtonText: "ກັບຄືນ",
+                    confirmButtonColor: "#dc3545",
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.history.back();
+                });
+            </script>
+        </body>
+        </html>
+        <?php
+        exit();
+    }
   $sql = $conn->prepare("SELECT * FROM users ORDER BY user_id ASC");
   $sql->execute();
   $num = 1;
@@ -46,19 +79,30 @@ $totalAdmin   = count(array_filter($users, fn($u) => $u['status']   === 'Admin')
   </div>
 
   <!-- Filter Bar -->
-  <div class="filter-bar">
-    <input type="text" id="searchInput" placeholder="🔍 ຄົ້ນຫາຊື່ / ອີເມລ..."
-           oninput="filterTable()">
-    <select id="filterRole" onchange="filterTable()">
-      <option value="">Role ທັງໝົດ</option>
-      <option value="Admin">Admin</option>
-      <option value="User">User</option>
-    </select>
-    <select id="filterStatus" onchange="filterTable()">
-      <option value="">ສະຖານະທັງໝົດ</option>
-      <option value="active">ໃຊ້ງານຢູ່</option>
-      <option value="inactive">ປິດ</option>
-    </select>
+   <div class="filter-bar row g-3 mb-3">
+    <div class="col-md-4 filter-group">
+        <label for="all">ຄົ້ນຫາ</label>
+        <input type="text" name="all" id="all" placeholder="🔍 ຄົ້ນຫາຊື່ / ອີເມລ...">
+    </div>
+    <div class="col-md-2 filter-group">
+        <label for="all">Role ທັງໝົດ</label>
+          <select id="filterRole">
+          <option value="">ເລືອກ</option>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+        </select>                           
+    </div>
+    <div class="col-md-2 filter-group">
+        <label for="all">ສະຖານະທັງໝົດ</label>
+          <select id="filterStatus">
+            <option value="">ເລືອກ</option>
+            <option value="active">ໃຊ້ງານຢູ່</option>
+            <option value="inactive">ປິດ</option>
+          </select>                          
+    </div>
+    <div class="col-md-2 filter-group btn-mt">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="alert('ຍັງບໍ່ໄດ້ເຮັດລະບົບຄົ້ນຫາ')"><i class="bi bi-search"></i> Search</button>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -119,7 +163,7 @@ $totalAdmin   = count(array_filter($users, fn($u) => $u['status']   === 'Admin')
                 <i class="bi bi-pencil-fill"></i> ແກ້ໄຂ
               </button>
               <!-- ປຸ່ມລົບ -->
-              <button class="btn-del" onclick="confirmDelete(<?= $u['user_id'] ?>, '<?= addslashes($u['fname']) ?>')">
+              <button class="btn-del del_user" data-user_id="<?= $u['user_id'] ?>">
                 <i class="bi bi-trash3-fill"></i>
               </button>
             </div>

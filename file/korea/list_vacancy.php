@@ -1,6 +1,42 @@
 <?php
 include_once('../check.php');
 include_once('header.php');
+$item_id = $_SESSION['item_id'];
+$item_ids = explode(',', $item_id);
+if(!in_array('0106', $item_ids)){
+    ?>
+    <!DOCTYPE html>
+    <html lang="lo">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
+
+        * {
+            font-family: "Noto Sans Lao", serif;
+        }
+    </style>
+    <body>
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "ການເຂົ້າເຖິງຖືກປະຕິເສດ",
+                text: "ທ່ານບໍ່ມີສິດເຂົ້າໃຊ້ໜ້ານີ້",
+                confirmButtonText: "ກັບຄືນ",
+                confirmButtonColor: "#dc3545",
+                allowOutsideClick: false
+            }).then(() => {
+                window.history.back();
+            });
+        </script>
+    </body>
+    </html>
+    <?php
+    exit();
+}
 
 // search
 $all = $_REQUEST['all'] ?? '';
@@ -81,10 +117,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; flex-wrap:wrap; gap:10px;">
     <div>
         <h5 style="font-size:19px; font-weight:700; color:#0f172a; margin:0;">
-            <i class="bi bi-briefcase-fill me-2 text-primary"></i> Vacancy List
+            <i class="bi bi-briefcase-fill me-2 text-primary"></i> Candidate List
         </h5>
     </div>
-    <!-- <a href="form/vacancy_add.php" class="btn btn-primary btn-sm px-3 py-2"
+    <!-- <a href="form/Candidate_add.php" class="btn btn-primary btn-sm px-3 py-2"
         style="font-size:13px; font-weight:600; border-radius:8px;">
         <i class="bi bi-plus-lg me-1"></i> Add
     </a> -->
@@ -92,7 +128,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <!-- ===== ຕາຕະລາງ User ===== -->
 <div class="dash-card">
     <div class="dash-card-title">
-        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Vacancy ທັງໝົດ
+        <i class="bi bi-table text-primary"></i> ລາຍຊື່ Candidate ທັງໝົດ
         <span class="ms-auto badge fw-semibold"
             style="background:#eff6ff; color:#1d4ed8; font-size:12px;">
             <?= $total ?> ລາຍການ

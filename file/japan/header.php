@@ -53,7 +53,7 @@
       <a href="<?= BASE_URLS ?>china/" class="nav-item"><img src="https://flagcdn.com/w40/cn.png" class="nav-flag"><span class="nav-text">China</span></a>
       <!-- ===== เมนูใหม่: Data List (มี dropdown) ===== -->
       <button class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#dataListCollapse" aria-expanded="false" aria-controls="dataListCollapse">
-        <i class="bi bi-folder2-open"></i>
+        <img src="https://flagcdn.com/w40/la.png" class="nav-flag">
         <span class="nav-text flex-grow-1">Data List</span>
         <i class="bi bi-chevron-down nav-caret"></i>
       </button>
@@ -105,7 +105,7 @@
           Employment <i class="bi bi-chevron-down"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu">
-          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Vacancy List</a></li>
+          <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Candidate List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Data Entry List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Approved List</a></li>
           <li><a class="dropdown-item" href="<?= BASE_URLSS ?>">Active List</a></li>

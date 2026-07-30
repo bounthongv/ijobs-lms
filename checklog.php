@@ -21,6 +21,8 @@
                 $_SESSION['status'] = $row['status'];
                 $_SESSION['fname'] = $row['fname'];
                 $_SESSION['lname'] = $row['lname'];
+                $_SESSION['menu_id'] = $row['menu_id'];
+                $_SESSION['item_id'] = $row['item_id'];
                 // เช็ค redirect ที่เก็บไว้
                 if (!empty($_SESSION['redirect_after_login'])) {
                     $redirectTo = $_SESSION['redirect_after_login'];

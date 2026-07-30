@@ -1,5 +1,41 @@
 <?php
 include('../header.php');
+$item_id = $_SESSION['item_id'];
+$item_ids = explode(',', $item_id);
+if(!in_array('0106', $item_ids)){
+    ?>
+    <!DOCTYPE html>
+    <html lang="lo">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
+
+        * {
+            font-family: "Noto Sans Lao", serif;
+        }
+    </style>
+    <body>
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "ການເຂົ້າເຖິງຖືກປະຕິເສດ",
+                text: "ທ່ານບໍ່ມີສິດເຂົ້າໃຊ້ໜ້ານີ້",
+                confirmButtonText: "ກັບຄືນ",
+                confirmButtonColor: "#dc3545",
+                allowOutsideClick: false
+            }).then(() => {
+                window.history.back();
+            });
+        </script>
+    </body>
+    </html>
+    <?php
+    exit();
+}
 $sql_pro = $conn->prepare("SELECT * FROM province ORDER BY pro_id ASC");
 $sql_pro->execute();
 $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);

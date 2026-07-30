@@ -53,7 +53,7 @@
       <a href="<?= BASE_URLS ?>china/" class="nav-item"><img src="https://flagcdn.com/w40/cn.png" class="nav-flag"><span class="nav-text">China</span></a>
       <!-- ===== เมนูใหม่: Data List (มี dropdown) ===== -->
       <button class="nav-item active" type="button" data-bs-toggle="collapse" data-bs-target="#dataListCollapse" aria-expanded="false" aria-controls="dataListCollapse">
-        <i class="bi bi-folder2-open"></i>
+        <img src="https://flagcdn.com/w40/la.png" class="nav-flag">
         <span class="nav-text flex-grow-1">Data List</span>
         <i class="bi bi-chevron-down nav-caret"></i>
       </button>

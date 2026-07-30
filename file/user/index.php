@@ -2,6 +2,41 @@
   // 1. ดึงส่วนหัวและเมนูมาแสดง
   include_once('../check.php');
   include_once('header.php'); 
+  if($_SESSION['status'] != 'Admin'){
+        ?>
+        <!DOCTYPE html>
+        <html lang="lo">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
+
+            * {
+                font-family: "Noto Sans Lao", serif;
+            }
+        </style>
+        <body>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "ການເຂົ້າເຖິງຖືກປະຕິເສດ",
+                    text: "ທ່ານບໍ່ມີສິດເຂົ້າໃຊ້ໜ້ານີ້",
+                    confirmButtonText: "ກັບຄືນ",
+                    confirmButtonColor: "#dc3545",
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.history.back();
+                });
+            </script>
+        </body>
+        </html>
+        <?php
+        exit();
+    }
+
 
   $all = $conn->prepare("SELECT COUNT(*) FROM users");
   $all->execute();
