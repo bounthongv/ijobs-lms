@@ -277,9 +277,18 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         </h5>
     </div>
 </div>
+<form method="POST" id="save_data" enctype="multipart/form-data">
+<div class="d-flex justify-content-start gap-2 px-3 py-2 border-top" style="background:#fafcfa;border-color:var(--green-border)!important;">
+            <a href="../list_data_entry.php" class="btn btn-sm btn-outline-secondary px-4">
+                <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
+            </a>
+            <button type="submit" class="btn btn-sm btn-primary px-4">
+                <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
+            </button>
+        </div>
 <div class="card shadow-none" style="max-width:1920px;">
 
-    <form method="POST" id="save_data" enctype="multipart/form-data">
+    
 
         <div class="section-head">
             <i class="bi bi-person me-2"></i>ຂໍ້ມູນສ່ວນຕົວ
@@ -977,17 +986,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <div class="d-flex justify-content-end gap-2 px-3 py-2 border-top" style="background:#fafcfa;border-color:var(--green-border)!important;">
-            <a href="../list_data_entry.php" class="btn btn-sm btn-outline-secondary px-4">
-                <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
-            </a>
-            <button type="submit" class="btn btn-sm btn-primary px-4">
-                <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
-            </button>
-        </div>
+        
 
-    </form>
-</div>
+    </div>
+</form>
 <?php
 include('../footer.php');
 ?>

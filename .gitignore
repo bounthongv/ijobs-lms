@@ -9,4 +9,7 @@ composer.lock
 *~
 *.swp
 file/korea/uploads/
-file/korea/del/
+file/korea/del/*
+!file/korea/del/del_profile.php
+!file/korea/del/del_id_profile.php
+!file/korea/del/del_file_form.php

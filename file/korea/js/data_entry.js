@@ -98,6 +98,70 @@ $(document).ready(function() {
 
     });
     $(document).ready(function() {
+        $(document).on('click', '.del_profile', function () {
+            var id = $(this).data('id');
+            Swal.fire({
+                title: "ຢືນຢັນການລົບ",
+                text: "ທ່ານຕ້ອງການລົບຮູບນີ້ແທ້ຫຼື ບໍ່?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຕົກລົງ",
+                cancelButtonText: "ຍົກເລີກ"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "../del/del_profile.php",
+                        type: "POST",
+                        data: { id: id },
+                        success: function (response) {
+                            if (response === "success") {
+                                location.reload();
+                            } else {
+                                Swal.fire(
+                                    "ຜິດພາດ!",
+                                    "ເກີດຂໍ້ຜິດພາດໃນການລົບ.",
+                                    "error"
+                                );
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        $(document).on('click', '.del_file_form', function () {
+            var id = $(this).data('id');
+            Swal.fire({
+                title: "ຢືນຢັນການລົບ",
+                text: "ທ່ານຕ້ອງການລົບຮູບນີ້ແທ້ຫຼື ບໍ່?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຕົກລົງ",
+                cancelButtonText: "ຍົກເລີກ"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "../del/del_file_form.php",
+                        type: "POST",
+                        data: { id: id },
+                        success: function (response) {
+                            if (response === "success") {
+                                location.reload();
+                            } else {
+                                Swal.fire(
+                                    "ຜິດພາດ!",
+                                    "ເກີດຂໍ້ຜິດພາດໃນການລົບ.",
+                                    "error"
+                                );
+                            }
+                        }
+                    });
+                }
+            });
+        });
         $("#btn-borrow, #btn-pay").click(function (e) { 
             var buttonId = $(this).attr('id');
             var buttonText = $(this).text().trim();

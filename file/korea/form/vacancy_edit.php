@@ -462,7 +462,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="col-12 col-sm-4">
                     <label class="form-label">Passport NO <span class="required">*</span></label>
-                    <input type="text" name="passport" class="form-control form-control-sm" value="<?= $row['passport'] ?>" required>
+                    <input type="text" name="passport" class="form-control form-control-sm" value="<?= $row['passport'] ?>">
                 </div>
                 <div class="col-12 col-sm-4">
                     <label class="form-label">Issue Date <span class="required">*</span></label>
