@@ -25,3 +25,7 @@ jobs:
             git reset --hard origin/master 2>&1
             bash /root/fix-job-connect.sh 2>&1 || echo "FIX_SCRIPT_FAILED"
             docker compose -f docker-compose.job.yml up --build -d 2>&1 || echo "DOCKER_FAILED"
+            echo "--- Setting uploads dir ownership for web write access ---"
+            mkdir -p /opt/job/file/korea/uploads
+            chown -R 33:33 /opt/job/file/korea/uploads
+            echo "uploads ownership OK"
