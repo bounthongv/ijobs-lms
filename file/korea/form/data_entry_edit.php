@@ -596,7 +596,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-12 col-sm-6">
                 <label class="form-label fw-bold mb-2">ຮູບພາບ <span class="asterisk">*</span></label>
                 <div class="upload-box" id="box-photo" onclick="document.getElementById('file-photo').click()">
-                    <div class="upload-content text-center" id="content-photo">
+                    <div class="upload-content text-center <?= $row['profile'] ? 'd-none' : '' ?>" id="content-photo" >
                         <div class="icon-circle">
                             <i class="bi bi-camera"></i>
                         </div>
@@ -614,7 +614,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-12 col-sm-6">
                 <label class="form-label fw-bold mb-2">ຟອມສຳພາດ <span class="asterisk">*</span></label>
                 <div class="upload-box" id="box-interview-form" onclick="document.getElementById('file-interview-form').click()">
-                    <div class="upload-content text-center" id="content-interview-form">
+                    <div class="upload-content text-center <?= $row['file_form'] ? 'd-none' : '' ?>" id="content-interview-form">
                         <div class="icon-circle">
                             <i class="bi bi-file-earmark-text"></i>
                         </div>

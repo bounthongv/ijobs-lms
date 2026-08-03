@@ -23,7 +23,7 @@ function clearComma($value) {
 // ===================================================
 function uploadFile($fieldName, $oldValue = null) {
 
-    $uploadDir = "/../korea/uploads/";
+    $uploadDir = "../uploads/";
     if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['error'] !== UPLOAD_ERR_OK) {
         return $oldValue;
     }
@@ -103,12 +103,12 @@ if ($passport) {
 $oldData = [
     'profile' => null, 'file_form' => null, 'doc_passport' => null,
     'doc_farmer_cert' => null, 'doc_labor_contract' => null,
-    'doc_census' => null, 'doc_collateral' => null
+    'doc_census' => null, 'doc_collateral' => null,'id_profile' => null
 ];
 
 if ($sub === "update" && $id) {
     $sqlOld = "SELECT profile, file_form, doc_passport, doc_farmer_cert,
-                      doc_labor_contract, doc_census, doc_collateral
+                      doc_labor_contract, doc_census, doc_collateral,id_profile
                FROM data_entry_korea WHERE id = :id";
     $stmtOld = $conn->prepare($sqlOld);
     $stmtOld->bindParam(":id", $id);
@@ -173,6 +173,7 @@ $data = [
     "doc_labor_contract" => uploadFile("doc_labor_contract", $oldData['doc_labor_contract']),
     "doc_census"         => uploadFile("doc_census", $oldData['doc_census']),
     "doc_collateral"     => uploadFile("doc_collateral", $oldData['doc_collateral']),
+    "id_profile"     => uploadFile("id_profile", $oldData['id_profile']),
 
     "heal_date"   => getPost("heal_date"),
     "diagnose"    => getPost("diagnose"),
