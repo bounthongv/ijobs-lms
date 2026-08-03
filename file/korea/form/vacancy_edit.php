@@ -328,13 +328,30 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:10px;">
     <div>
         <h5 style="font-size:19px; font-weight:700; color:#0f172a; margin:0;">
-            <i class="bi bi-file-earmark-text me-2 text-primary"></i>Vacancy Edit
+            <i class="bi bi-file-earmark-text me-2 text-primary"></i>Candidate Edit
         </h5>
     </div>
 </div>
+<form method="POST" id="edit_vacancy" enctype="multipart/form-data">
+<div class="d-flex justify-content-start gap-2 px-3 py-2 border-top" style="background:#fafcfa;border-color:var(--green-border)!important;">
+            <a href="../list_vacancy.php" class="btn btn-sm btn-outline-secondary px-4">
+                <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
+            </a>
+            <?php if ($row['sts_save'] == 'Verify'): ?>
+            <?php else: ?>
+                <button type="button" id="verify_vacancy" class="btn btn-sm btn-warning px-4">
+                    <i class="bi bi-patch-check-fill me-1"></i> Verify
+                </button>
+
+                <button type="submit" class="btn btn-sm btn-primary px-4">
+                    <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
+                </button>
+            <?php endif ?>
+
+        </div>
 <div class="card shadow-none" style="max-width:1920px;">
 
-    <form method="POST" id="edit_vacancy" enctype="multipart/form-data">
+    
 
         <input type="hidden" name="id" value="<?= $row['id'] ?>">
         <input type="hidden" name="sub" value="update">
@@ -598,7 +615,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="p-3">
             <div class="row g-3">
-                <div class="col-12 col-sm-6">
+                <div class="col-12 col-sm-6 text-center">
                     <label class="form-label fw-bold mb-2">ຮູບຖ່າຍເຄິ່ງຄີງ <span class="asterisk">*</span>: </label>
                     <div class="upload-box" id="box-photo" onclick="document.getElementById('file-photo').click()">
                         <div class="upload-content text-center <?= $row['profile'] ? 'd-none' : '' ?>" id="content-photo">
@@ -614,8 +631,9 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <input type="file" name="profile" id="file-photo" accept="image/*" class="d-none">
                     </div>
+                    <button type="button" class="btn btn-danger btn-sm mt-2 del_profile" data-id="<?= $row['id'] ?>"><i class="fa fa-trash"></i> ລົບຮູບ</button>
                 </div>
-                <div class="col-12 col-sm-6">
+                <div class="col-12 col-sm-6 text-center">
                     <label class="form-label fw-bold mb-2">ຮູບເອກະສານຢືນຢັນຕົວຕົນ <span class="asterisk">*</span>: </label>
                     <div class="upload-box" id="box-interview-form" onclick="document.getElementById('file-interview-form').click()">
                         <div class="upload-content text-center <?= $row['id_profile'] ? 'd-none' : '' ?>" id="content-interview-form">
@@ -631,6 +649,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <input type="file" name="id_profile" id="file-interview-form" accept="image/*" class="d-none">
                     </div>
+                    <button type="button" class="btn btn-danger btn-sm mt-2 del_id_profile" data-id="<?= $row['id'] ?>"><i class="fa fa-trash"></i> ລົບຮູບ</button>
                 </div>
 
             </div>
@@ -648,25 +667,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <div class="d-flex justify-content-end gap-2 px-3 py-2 border-top" style="background:#fafcfa;border-color:var(--green-border)!important;">
-            <a href="../list_vacancy.php" class="btn btn-sm btn-outline-secondary px-4">
-                <i class="bi bi-x-lg me-1"></i> ຍົກເລີກ
-            </a>
-            <?php if ($row['sts_save'] == 'Verify'): ?>
-            <?php else: ?>
-                <button type="button" id="verify_vacancy" class="btn btn-sm btn-warning px-4">
-                    <i class="bi bi-patch-check-fill me-1"></i> Verify
-                </button>
+        
 
-                <button type="submit" class="btn btn-sm btn-primary px-4">
-                    <i class="bi bi-floppy me-1"></i> ບັນທຶกຂໍ້ມູນ
-                </button>
-            <?php endif ?>
-
-        </div>
-
-    </form>
-</div>
+    </div>
+</form>
 <?php
 include('../footer.php');
 ?>
