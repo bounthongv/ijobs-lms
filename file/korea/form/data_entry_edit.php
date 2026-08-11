@@ -36,7 +36,7 @@ if(!in_array('0107', $item_ids)){
     <?php
     exit();
 }
-$id = $_GET['id'];
+$cid = $_GET['cid'];
 $sql = $conn->prepare("SELECT *,
 -- ປັດຈຸບັນ
 pro.pro_name_lao as pro_name_lao,
@@ -49,9 +49,9 @@ vill.vill_id as vill_id,
 pro_b.pro_name_lao as pro_name_b,
 dis_b.dis_name_lao as dis_name_b,
 vill_b.vill_name_lao as vill_name_b,
-data.pro_id_b,
-data.dis_id_b,
-data.vill_id_b,
+cand.pro_id_b,
+cand.dis_id_b,
+cand.vill_id_b,
 -- ຄ້ຳປະກັນ
 pro_c.pro_name_lao as pro_name_c,
 dis_c.dis_name_lao as dis_name_c,
@@ -65,15 +65,17 @@ dis_d.dis_name_lao as dis_name_d,
 vill_d.vill_name_lao as vill_name_d,
 data.gua_pro,
 data.gua_dis,
-data.gua_vill
+data.gua_vill,
+data.id
 FROM data_entry_korea as data
-LEFT JOIN province as pro ON data.pro_id=pro.pro_id
-LEFT JOIN district as dis ON data.dis_id=dis.dis_id
-LEFT JOIN village as vill ON data.vill_id=vill.vill_id
+RIGHT JOIN candidate_korea as cand ON data.data_id=cand.cid
+LEFT JOIN province as pro ON cand.pro_id=pro.pro_id
+LEFT JOIN district as dis ON cand.dis_id=dis.dis_id
+LEFT JOIN village as vill ON cand.vill_id=vill.vill_id
 
-LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
-LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
-LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id
+LEFT JOIN province as pro_b ON cand.pro_id_b=pro_b.pro_id
+LEFT JOIN district as dis_b ON cand.dis_id_b=dis_b.dis_id
+LEFT JOIN village as vill_b ON cand.vill_id_b=vill_b.vill_id
 
 LEFT JOIN province as pro_c ON data.coll_pro=pro_c.pro_id
 LEFT JOIN district as dis_c ON data.coll_dis=dis_c.dis_id
@@ -82,12 +84,14 @@ LEFT JOIN village as vill_c ON data.coll_vill=vill_c.vill_id
 LEFT JOIN province as pro_d ON data.gua_pro=pro_d.pro_id
 LEFT JOIN district as dis_d ON data.gua_dis=dis_d.dis_id
 LEFT JOIN village as vill_d ON data.gua_vill=vill_d.vill_id
-WHERE id = ?");
-$sql->execute([$id]);
+WHERE cid = ?");
+$sql->execute([$cid]);
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 $sql_pro = $conn->prepare("SELECT * FROM province ORDER BY pro_id ASC");
 $sql_pro->execute();
 $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
+$sql_tri = $conn->prepare("SELECT * FROM tribes ORDER BY tri_id ASC");
+$sql_tri->execute();
 ?>
 <style>
     :root {
@@ -354,6 +358,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <label class="form-label">Interview Date <span class="required">*</span></label>
                 <input type="date" name="interview_date" class="form-control form-control-sm" value="<?= $row['interview_date'] ?>">
                 <input type="hidden" name="id" class="form-control form-control-sm" value="<?= $row['id'] ?>">
+                <input type="hidden" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>">
             </div>
             <div class="col-12 col-sm-4">
                 <label class="form-label">Eng Sure Name <span class="required">*</span></label>
@@ -501,10 +506,9 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <label class="form-label">ຊົນເຜົ່າ <span class="required">*</span></label>
                 <select name="eth" class="form-select form-select-sm">
                     <?php
-                    $eth_list = ["ລາວລຸ່ມ","ລາວເທິງ","ລາວສູງ","ມົ້ງ","ໄຕ","ຜູ້ໄທ","ລື້","ຍວນ","ຢັ້ງ","ແຊກ","ໄທເໜືອ","ກຶມມຸ","ກະຕາງ","ກະຕູ","ກຣຽງ","ກຣີ","ຂະແມ","ງວນ","ສາມຕ່າວ","ເຈັງ","ສະດາງ","ຊ່ວຍ","ຊິງມູນ","ຍະເຫີນ","ຕະໂອ້ຍ","ຕຣຽງ","ຕຣີ","ຕູມ","ແທ່ນ","ບິດ","ບຣູ","ເບຣົາ","ປະໂກະ","ໄປຣ","ຜ້ອງ","ມະກອງ","ມ້ອຍ","ຢຣຸ","ແຢະ","ລະເມດ","ລະວີ","ໂອຍ","ເອີດູ","ຮ່າຣັກ","ລາຫູ","ສີລາ","ຮ່າຍີ່","ໂລໂລ","ຫໍ້","ສິງສີລິ/ພູນ້ອຍ","ອິວມ້ຽນ"];
-                    foreach ($eth_list as $opt): ?>
-                        <option value="<?= $opt ?>" <?= $row['eth'] == $opt ? 'selected' : '' ?>><?= $opt ?></option>
-                    <?php endforeach ?>
+                        foreach ($sql_tri as $opt): ?>
+                            <option value="<?= $opt['tri_name'] ?>" <?= $row['eth'] == $opt['tri_name'] ? 'selected' : '' ?>><?= $opt['tri_name'] ?></option>
+                        <?php endforeach ?>
                 </select>
             </div>
             <div class="col-12 col-sm-4">

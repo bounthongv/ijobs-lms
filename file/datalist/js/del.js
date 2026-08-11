@@ -95,4 +95,36 @@ $(document).ready(function () {
             }
         });
     });
+    $(document).on('click', '.del_tri', function () {
+        var tri_id = $(this).data('tri_id');
+        Swal.fire({
+            title: "ຢືນຢັນການລົບ",
+            text: "ທ່ານຕ້ອງການລົບຂໍ້ມູນນີ້ແທ້ຫຼື ບໍ່?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ຕົກລົງ",
+            cancelButtonText: "ຍົກເລີກ"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "del/del_tri.php",
+                    type: "POST",
+                    data: { id: tri_id },
+                    success: function (response) {
+                        if (response === "success") {
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                "ຜິດພາດ!",
+                                "ເກີດຂໍ້ຜິດພາດໃນການລົບ.",
+                                "error"
+                            );
+                        }
+                    }
+                });
+            }
+        });
+    });
 });

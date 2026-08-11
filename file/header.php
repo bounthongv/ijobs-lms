@@ -324,6 +324,9 @@ button.nav-item[aria-expanded="true"] .nav-caret { transform: rotate(180deg); }
         <a href="<?= BASE_URLS ?>datalist/list_vill.php" class="nav-item nav-subitem">
           <span class="nav-text">Lao Village</span>
         </a>
+        <a href="<?= BASE_URLS ?>datalist/list_tribes.php" class="nav-item nav-subitem">
+          <span class="nav-text">Lao Tribes</span>
+        </a>
       </div>
       <!-- ===== จบเมนู Data List ===== -->
       <a href="<?= BASE_URLS ?>user/" class="nav-item"><img src="https://th.bing.com/th/id/R.b2b34517339101a111716be1c203f354?rik=e5WHTShSpipi3Q&pid=ImgRaw&r=0" class="nav-flag"><span class="nav-text">Users</span></a>

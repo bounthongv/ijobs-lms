@@ -49,52 +49,40 @@ function uploadFile($fieldName, $oldValue = null) {
 }
 
 // ===================================================
-// ຮັບຄ່າ sub ເພື່ອກຳນົດວ່າຈະ insert ຫຼື update
+// ຮັບຄ່າຈາກຟອມ
 // ===================================================
-$sub = getPost("sub"); // "insert" ຫຼື "update"
-$id  = getPost("id");
+$dataId = getPost("data_id"); // primary key ຂອງ data_entry_korea (ຖ້າມີ)
+$cid    = getPost("cid");     // id ຂອງ candidate_korea (ຕ້ອງມີສະເໝີ)
 $passport = getPost("passport");
 
-$sql    = "";
-$params = [];
-$msg    = "";
+$msg = "";
 
 // ===================================================
-// ກວດສອບ Passport ຊ້ຳກັນ ກ່ອນບັນທຶກ
+// ຕ້ອງມີ cid ສະເໝີ ເພາະ candidate_korea ບໍ່ມີການ insert ໃໝ່
 // ===================================================
-if ($passport) {
+if (!$cid) {
+    echo json_encode([
+        'message' => 'ບໍ່ພົບ CID (candidate) ທີ່ຈະອັບເດດ',
+        'sts' => 'error'
+    ]);
+    exit;
+}
 
-    if ($sub === "insert") {
-        // ກວດວ່າມີ Passport ນີ້ຢູ່ໃນຕາຕະລາງແລ້ວບໍ່
-        $sqlCheck = "SELECT id FROM data_entry_korea WHERE passport = :passport";
-        $stmtCheck = $conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(":passport", $passport);
-        $stmtCheck->execute();
+// ===================================================
+// ກວດສອບວ່າ data_entry_korea ຂອງ cid ນີ້ມີແລ້ວບໍ່
+// ຖ້າມີ -> update, ຖ້າບໍ່ມີ -> insert
+// ===================================================
+$sqlExist = "SELECT data_id FROM data_entry_korea WHERE data_id = :cid LIMIT 1";
+$stmtExist = $conn->prepare($sqlExist);
+$stmtExist->bindParam(":cid", $cid);
+$stmtExist->execute();
+$existRow = $stmtExist->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmtCheck->rowCount() > 0) {
-            echo json_encode([
-                'message' => 'ເລກ Passport ນີ້ຖືກນຳໃຊ້ໄປແລ້ວ ກະລຸນາກວດສອບຄືນ',
-                'sts' => 'error'
-            ]);
-            exit;
-        }
-
-    } elseif ($sub === "update") {
-        // ກວດວ່າມີ Passport ນີ້ຢູ່ໃນ Row ອື່ນ (ບໍ່ແມ່ນ id ຕົນເອງ) ຫຼືບໍ່
-        $sqlCheck = "SELECT id FROM data_entry_korea WHERE passport = :passport AND id != :id";
-        $stmtCheck = $conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(":passport", $passport);
-        $stmtCheck->bindParam(":id", $id);
-        $stmtCheck->execute();
-
-        if ($stmtCheck->rowCount() > 0) {
-            echo json_encode([
-                'message' => 'ເລກ Passport ນີ້ຖືກນຳໃຊ້ໄປແລ້ວ ກະລຸນາກວດສອບຄືນ',
-                'sts' => 'error'
-            ]);
-            exit;
-        }
-    }
+if ($existRow) {
+    $sub    = "update";
+    $dataId = $existRow['data_id']; // ໃຊ້ data_id ທີ່ຄົ້ນເຈິ ເພື່ອຄວາມແນ່ນອນ
+} else {
+    $sub = "insert";
 }
 
 // ===================================================
@@ -106,12 +94,12 @@ $oldData = [
     'doc_census' => null, 'doc_collateral' => null
 ];
 
-if ($sub === "update" && $id) {
+if ($sub === "update" && $dataId) {
     $sqlOld = "SELECT profile, file_form, doc_passport, doc_farmer_cert,
                       doc_labor_contract, doc_census, doc_collateral
-               FROM data_entry_korea WHERE id = :id";
+               FROM data_entry_korea WHERE data_id = :data_id";
     $stmtOld = $conn->prepare($sqlOld);
-    $stmtOld->bindParam(":id", $id);
+    $stmtOld->bindParam(":data_id", $dataId);
     $stmtOld->execute();
     $fetched = $stmtOld->fetch(PDO::FETCH_ASSOC);
 
@@ -121,10 +109,10 @@ if ($sub === "update" && $id) {
 }
 
 // ===================================================
-// ດຶງຄ່າຈາກຟອມທັງໝົດ (ໃຊ້ຮ່ວມກັນທັງ insert ແລະ update)
+// ຊຸດຂໍ້ມູນ 1: ໄປຕາຕະລາງ candidate_korea (update ຢ່າງດຽວ)
 // ===================================================
-$data = [
-    "interview_date"       => getPost("interview_date"),
+$dataCandidate = [
+    "interview_date"      => getPost("interview_date"),
     "lname_eng"           => getPost("lname_eng"),
     "fname_eng"           => getPost("fname_eng"),
     "nickname"            => getPost("nickname"),
@@ -158,15 +146,22 @@ $data = [
     "job"                 => getPost("job"),
     "interview_name"      => getPost("interview_name"),
     "list_type"           => getPost("list"),
-
     "pro_id"    => getPost("pro_id"),
     "dis_id"    => getPost("dis_id"),
     "vill_id"   => getPost("vill_id"),
     "pro_id_b"  => getPost("pro_id_b"),
     "dis_id_b"  => getPost("dis_id_b"),
     "vill_id_b" => getPost("vill_id_b"),
+    "sts_data"  => getPost("sts_data"),
+];
 
-    "profile"            => uploadFile("profile", $oldData['profile']),
+// ===================================================
+// ຊຸດຂໍ້ມູນ 2: ໄປຕາຕະລາງ data_entry_korea (ອັນອື່ນທັງໝົດ)
+// ===================================================
+$dataEntry = [
+    "data_id" => $cid, // ໂຍງກັບ candidate_korea
+
+    // "profile"            => uploadFile("profile", $oldData['profile']),
     "file_form"          => uploadFile("file_form", $oldData['file_form']),
     "doc_passport"       => uploadFile("doc_passport", $oldData['doc_passport']),
     "doc_farmer_cert"    => uploadFile("doc_farmer_cert", $oldData['doc_farmer_cert']),
@@ -219,79 +214,74 @@ $data = [
     "gua_vill"        => getPost("gua_vill"),
 
     "da_remark" => getPost("da_remark"),
-    "sts_data" => getPost("sts_data"),
 ];
 
-// ===================================================
-// 1. ກໍລະນີ Insert (ຂໍ້ມູນໃໝ່)
-// ===================================================
-if ($sub === "insert") {
+try {
 
-    $columns      = implode(", ", array_keys($data));
-    $placeholders = ":" . implode(", :", array_keys($data));
-
-    $sql = "INSERT INTO data_entry_korea ($columns) VALUES ($placeholders)";
-
-    foreach ($data as $key => $value) {
-        $params[":" . $key] = $value;
+    // ===================================================
+    // 0. ອັບເດດ candidate_korea ສະເໝີ (candidate_korea ບໍ່ມີການ insert)
+    // ===================================================
+    $setClauseC = "";
+    foreach ($dataCandidate as $key => $value) {
+        $setClauseC .= "$key = :$key, ";
     }
+    $setClauseC = rtrim($setClauseC, ", ");
 
-    $msg = "ບັນທຶກຂໍ້ມູນສຳເລັດ";
-
-// ===================================================
-// 2. ກໍລະນີ Update (ແກ້ໄຂຂໍ້ມູນເກົ່າ)
-// ===================================================
-} elseif ($sub === "update") {
-
-    if (!$id) {
-        echo json_encode(['message' => 'ບໍ່ພົບ ID ຂໍ້ມູນທີ່ຈະແກ້ໄຂ', 'sts' => 'error']);
-        exit;
+    $sqlC = "UPDATE candidate_korea SET $setClauseC WHERE cid = :cid";
+    $stmtC = $conn->prepare($sqlC);
+    foreach ($dataCandidate as $key => $value) {
+        $stmtC->bindValue(":" . $key, $value);
     }
+    $stmtC->bindValue(":cid", $cid);
+    $stmtC->execute();
 
-    $setClause = "";
-    foreach ($data as $key => $value) {
-        $setClause .= "$key = :$key, ";
-        $params[":" . $key] = $value;
-    }
-    $setClause = rtrim($setClause, ", ");
+    // ===================================================
+    // 1. ກໍລະນີ Insert (ຍັງບໍ່ມີຂໍ້ມູນ data_entry_korea ຂອງ cid ນີ້)
+    // ===================================================
+    if ($sub === "insert") {
 
-    $sql = "UPDATE data_entry_korea SET $setClause WHERE id = :id";
-    $params[":id"] = $id;
+        $columnsE      = implode(", ", array_keys($dataEntry));
+        $placeholdersE = ":" . implode(", :", array_keys($dataEntry));
+        $sqlE = "INSERT INTO data_entry_korea ($columnsE) VALUES ($placeholdersE)";
 
-    $msg = "ແກ້ໄຂຂໍ້ມູນສຳເລັດ";
-}
-
-// ===================================================
-// 3. ທຳງານຄຳສັ່ງ SQL ທີ່ເລືອກຜ່ານຕົວແປ $sub
-// ===================================================
-if (!empty($sql)) {
-
-    try {
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->execute($params);
-
-        if ($result) {
-            echo json_encode([
-                'message' => $msg,
-                'sts' => 'success'
-            ]);
-        } else {
-            echo json_encode([
-                'message' => 'ບໍ່ສາມາດບັນທຶກຂໍ້ມູນໄດ້',
-                'sts' => 'error'
-            ]);
+        $stmtE = $conn->prepare($sqlE);
+        foreach ($dataEntry as $key => $value) {
+            $stmtE->bindValue(":" . $key, $value);
         }
+        $stmtE->execute();
 
-    } catch (PDOException $e) {
-        echo json_encode([
-            'message' => $e->getMessage(),
-            'sts' => 'error'
-        ]);
+        $msg = "ບັນທຶກຂໍ້ມູນສຳເລັດ";
+
+    // ===================================================
+    // 2. ກໍລະນີ Update (ມີຂໍ້ມູນ data_entry_korea ຂອງ cid ນີ້ຢູ່ແລ້ວ)
+    // ===================================================
+    } else {
+
+        $setClauseE = "";
+        foreach ($dataEntry as $key => $value) {
+            $setClauseE .= "$key = :$key, ";
+        }
+        $setClauseE = rtrim($setClauseE, ", ");
+
+        $sqlE = "UPDATE data_entry_korea SET $setClauseE WHERE data_id = :data_id";
+        $stmtE = $conn->prepare($sqlE);
+        foreach ($dataEntry as $key => $value) {
+            $stmtE->bindValue(":" . $key, $value);
+        }
+        $stmtE->bindValue(":data_id", $dataId);
+        $stmtE->execute();
+
+        $msg = "ແກ້ໄຂຂໍ້ມູນສຳເລັດ";
     }
 
-} else {
     echo json_encode([
-        'message' => 'ບໍ່ພົບຄຳສັ່ງ sub (insert/update) ທີ່ຖືກຕ້ອງ',
+        'message' => $msg,
+        'sts' => 'success'
+    ]);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        'message' => $e->getMessage(),
         'sts' => 'error'
     ]);
 }

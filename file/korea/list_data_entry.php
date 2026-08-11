@@ -78,31 +78,35 @@ vill.vill_id as vill_id,
 pro_b.pro_name_lao as pro_name_b,
 dis_b.dis_name_lao as dis_name_b,
 vill_b.vill_name_lao as vill_name_b,
-data.pro_id_b,
-data.dis_id_b,
-data.vill_id_b
+cand.pro_id_b,
+cand.dis_id_b,
+cand.vill_id_b
 FROM data_entry_korea as data
-LEFT JOIN province as pro ON data.pro_id=pro.pro_id
-LEFT JOIN district as dis ON data.dis_id=dis.dis_id
-LEFT JOIN village as vill ON data.vill_id=vill.vill_id
+RIGHT JOIN candidate_korea as cand ON data.data_id=cand.cid
+LEFT JOIN province as pro ON cand.pro_id=pro.pro_id
+LEFT JOIN district as dis ON cand.dis_id=dis.dis_id
+LEFT JOIN village as vill ON cand.vill_id=vill.vill_id
 
-LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
-LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
-LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id 
-WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7
-ORDER BY id ASC
+LEFT JOIN province as pro_b ON cand.pro_id_b=pro_b.pro_id
+LEFT JOIN district as dis_b ON cand.dis_id_b=dis_b.dis_id
+LEFT JOIN village as vill_b ON cand.vill_id_b=vill_b.vill_id 
+WHERE sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7
+ORDER BY cid ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
 $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
-WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+LEFT JOIN candidate_korea as cand ON data.data_id=cand.cid
+WHERE sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
 $total_pages = ceil($total_row['total'] / $limit);
 
 $num = $offset + 1;
 // total
-$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data WHERE sts_tb = 'data_entry_korea' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data
+LEFT JOIN candidate_korea as cand ON data.data_id=cand.cid
+WHERE sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
@@ -126,10 +130,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             <i class="bi bi-card-checklist me-2 text-primary"></i> Data Entry List
         </h5>
     </div>
-    <a href="form/data_entry_add.php" class="btn btn-primary btn-sm px-3 py-2"
+    <!-- <a href="form/data_entry_add.php" class="btn btn-primary btn-sm px-3 py-2"
         style="font-size:13px; font-weight:600; border-radius:8px;">
         <i class="bi bi-plus-lg me-1"></i> Add
-    </a>
+    </a> -->
 </div>
 <!-- ===== ຕາຕະລາງ User ===== -->
 <div class="dash-card">
@@ -146,7 +150,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         <div class="filter-bar row g-3 mb-3">
             <div class="col-md-4 filter-group">
                 <label for="all">ຄົ້ນຫາ</label>
-                <input type="text" name="all" id="all" placeholder="🔍 ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
+                <input type="text" name="all" id="all" placeholder="ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
             </div>
 
             <div class="col-md-2 filter-group">
@@ -294,7 +298,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <td><?= $num++; ?></td>
                             <td>
-                                <a href="form/data_entry_edit.php?id=<?= $row['id'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                <a href="form/data_entry_edit.php?cid=<?= $row['cid'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
                                 <!-- <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_data"><i class="bi bi-trash"></i></button> -->
                             </td>
                             <td>
@@ -311,7 +315,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
                             </td>
-                            <td><a href="print/print_certificate.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><a href="print/print_certificate.php?cid=<?= $row['cid'] ?> ?>" target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
                             <td><a href="print/print_address.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
                             <td>
                                 <?php if (!empty($row['profile'])): ?>

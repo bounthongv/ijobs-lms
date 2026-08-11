@@ -148,7 +148,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         <div class="filter-bar row g-3 mb-3">
             <div class="col-md-4 filter-group">
                 <label for="all">ຄົ້ນຫາ</label>
-                <input type="text" name="all" id="all" placeholder="🔍 ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
+                <input type="text" name="all" id="all" placeholder="ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
             </div>
 
             <div class="col-md-2 filter-group">

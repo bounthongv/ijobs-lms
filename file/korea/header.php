@@ -67,6 +67,9 @@
         <a href="<?= BASE_URLS ?>datalist/list_vill.php" class="nav-item nav-subitem">
           <span class="nav-text">Lao Village</span>
         </a>
+        <a href="<?= BASE_URLS ?>datalist/list_tribes.php" class="nav-item nav-subitem">
+          <span class="nav-text">Lao Tribes</span>
+        </a>
       </div>
       <!-- ===== จบเมนู Data List ===== -->
       <!-- <a href="<?= BASE_URLS ?>geramany/" class="nav-item"><img src="https://flagcdn.com/w40/de.png" class="nav-flag"><span class="nav-text">ເຢຍລະມັນ</span></a> -->

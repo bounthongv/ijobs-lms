@@ -13,3 +13,5 @@ file/korea/del/*
 !file/korea/del/del_profile.php
 !file/korea/del/del_id_profile.php
 !file/korea/del/del_file_form.php
+file/korea/insert/old/
+file/korea/css/style*-*.css

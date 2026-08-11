@@ -473,4 +473,66 @@ $(document).ready(function () {
             }
         });
     });
+    $("#reject_vacancy").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#edit_vacancy")[0];
+        let formData = new FormData(form);
+        formData.append("sub",'update');
+        formData.append("sts_save",'Reject');
+        formData.append("sts_tb",'vacancy');
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_vacancy.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                    setTimeout(function() {
+                        location = '../list_vacancy.php';
+                    }, 2000);
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
+    $("#data_vacancy").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#edit_vacancy")[0];
+        let formData = new FormData(form);
+        formData.append("sub",'update');
+        formData.append("sts_save",'Data Entry');
+        formData.append("sts_tb",'data_entry_korea');
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_vacancy.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                    setTimeout(function() {
+                        location = '../list_vacancy.php';
+                    }, 2000);
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
 });

@@ -66,7 +66,7 @@ if ($passport) {
 
     if ($sub === "insert") {
         // ກວດວ່າມີ Passport ນີ້ຢູ່ໃນຕາຕະລາງແລ້ວບໍ່
-        $sqlCheck = "SELECT id FROM data_entry_korea WHERE passport = :passport";
+        $sqlCheck = "SELECT id FROM candidate_korea WHERE passport = :passport";
         $stmtCheck = $conn->prepare($sqlCheck);
         $stmtCheck->bindParam(":passport", $passport);
         $stmtCheck->execute();
@@ -81,7 +81,7 @@ if ($passport) {
 
     } elseif ($sub === "update") {
         // ກວດວ່າມີ Passport ນີ້ຢູ່ໃນ Row ອື່ນ (ບໍ່ແມ່ນ id ຕົນເອງ) ຫຼືບໍ່
-        $sqlCheck = "SELECT id FROM data_entry_korea WHERE passport = :passport AND id != :id";
+        $sqlCheck = "SELECT id FROM candidate_korea WHERE passport = :passport AND id != :id";
         $stmtCheck = $conn->prepare($sqlCheck);
         $stmtCheck->bindParam(":passport", $passport);
         $stmtCheck->bindParam(":id", $id);
@@ -101,15 +101,12 @@ if ($passport) {
 // ດຶງຂໍ້ມູນເກົ່າຂອງໄຟລ໌ (ໃຊ້ສະເພາະຕອນ update)
 // ===================================================
 $oldData = [
-    'profile' => null, 'file_form' => null, 'doc_passport' => null,
-    'doc_farmer_cert' => null, 'doc_labor_contract' => null,
-    'doc_census' => null, 'doc_collateral' => null,'id_profile' => null
+    'profile' => null,'id_profile' => null
 ];
 
 if ($sub === "update" && $id) {
-    $sqlOld = "SELECT profile, file_form, doc_passport, doc_farmer_cert,
-                      doc_labor_contract, doc_census, doc_collateral,id_profile
-               FROM data_entry_korea WHERE id = :id";
+    $sqlOld = "SELECT profile, id_profile
+               FROM candidate_korea WHERE id = :id";
     $stmtOld = $conn->prepare($sqlOld);
     $stmtOld->bindParam(":id", $id);
     $stmtOld->execute();
@@ -124,7 +121,7 @@ if ($sub === "update" && $id) {
 // ດຶງຄ່າຈາກຟອມທັງໝົດ (ໃຊ້ຮ່ວມກັນທັງ insert ແລະ update)
 // ===================================================
 $data = [
-    "interview_date"       => getPost("interview_date"),
+    "register_date"       => getPost("register_date"),
     "lname_eng"           => getPost("lname_eng"),
     "fname_eng"           => getPost("fname_eng"),
     "nickname"            => getPost("nickname"),
@@ -167,61 +164,10 @@ $data = [
     "vill_id_b" => getPost("vill_id_b"),
 
     "profile"            => uploadFile("profile", $oldData['profile']),
-    "file_form"          => uploadFile("file_form", $oldData['file_form']),
-    "doc_passport"       => uploadFile("doc_passport", $oldData['doc_passport']),
-    "doc_farmer_cert"    => uploadFile("doc_farmer_cert", $oldData['doc_farmer_cert']),
-    "doc_labor_contract" => uploadFile("doc_labor_contract", $oldData['doc_labor_contract']),
-    "doc_census"         => uploadFile("doc_census", $oldData['doc_census']),
-    "doc_collateral"     => uploadFile("doc_collateral", $oldData['doc_collateral']),
     "id_profile"     => uploadFile("id_profile", $oldData['id_profile']),
-
-    "heal_date"   => getPost("heal_date"),
-    "diagnose"    => getPost("diagnose"),
-    "clinic"      => getPost("clinic"),
-    "cli_date"    => getPost("cli_date"),
-    "check_up"    => clearComma(getPost("check_up")),
-    "heal_date2"  => getPost("heal_date2"),
-    "check_up2"   => clearComma(getPost("check_up2")),
-    "heal_date3"  => getPost("heal_date3"),
-    "check_up3"   => clearComma(getPost("check_up3")),
-    "heal_remark" => getPost("heal_remark"),
-    "heal_sts"    => getPost("heal_sts"),
-
-    "pay_sts"   => getPost("pay_sts"),
-    "labor_fee" => clearComma(getPost("labor_fee")),
-
-    "coll_sts"   => getPost("coll_sts"),
-    "coll_type"  => getPost("coll_type"),
-    "coll_owner" => getPost("coll_owner"),
-    "coll_area"  => getPost("coll_area"),
-    "coll_no"    => getPost("coll_no"),
-    "coll_date"  => getPost("coll_date"),
-    "coll_value" => clearComma(getPost("coll_value")),
-    "coll_pro"   => getPost("coll_pro"),
-    "coll_dis"   => getPost("coll_dis"),
-    "coll_vill"  => getPost("coll_vill"),
-    "coll_unit"  => getPost("coll_unit"),
-    "coll_map"   => getPost("coll_map"),
-
-    "gua_relation"    => getPost("gua_relation"),
-    "gua_fname"       => getPost("gua_fname"),
-    "gua_phone"       => getPost("gua_phone"),
-    "gua_dob"         => getPost("gua_dob"),
-    "gua_nationality" => getPost("gua_nationality"),
-    "gua_job"         => getPost("gua_job"),
-    "gua_age"         => getPost("gua_age"),
-    "gua_gender"      => getPost("gua_gender"),
-    "gua_pro"         => getPost("gua_pro"),
-    "gua_book"        => getPost("gua_book"),
-    "gua_book_date"   => getPost("gua_book_date"),
-    "gua_dis"         => getPost("gua_dis"),
-    "gua_unit"        => getPost("gua_unit"),
-    "gua_home"        => getPost("gua_home"),
-    "gua_vill"        => getPost("gua_vill"),
     "sts_save"        => getPost("sts_save"),
-    
-    "da_remark" => getPost("da_remark"),
-    "sts_tb"        => getPost("sts_tb"),
+    "candidate_remark" => getPost("candidate_remark"),
+    "interview_date"        => getPost("interview_date"),
 ];
 
 // ===================================================
@@ -232,7 +178,7 @@ if ($sub === "insert") {
     $columns      = implode(", ", array_keys($data));
     $placeholders = ":" . implode(", :", array_keys($data));
 
-    $sql = "INSERT INTO data_entry_korea ($columns) VALUES ($placeholders)";
+    $sql = "INSERT INTO candidate_korea ($columns) VALUES ($placeholders)";
 
     foreach ($data as $key => $value) {
         $params[":" . $key] = $value;
@@ -257,7 +203,7 @@ if ($sub === "insert") {
     }
     $setClause = rtrim($setClause, ", ");
 
-    $sql = "UPDATE data_entry_korea SET $setClause WHERE id = :id";
+    $sql = "UPDATE candidate_korea SET $setClause WHERE id = :id";
     $params[":id"] = $id;
 
     $msg = "ແກ້ໄຂຂໍ້ມູນສຳເລັດ";

@@ -48,6 +48,9 @@ $vill_id = $_REQUEST['vill_id'] ?? '';
 $type = $_REQUEST['type'] ?? '';
 $date1 = $_REQUEST['date1'] ?? '';
 $date2 = $_REQUEST['date2'] ?? '';
+$status = $_REQUEST['status'] ?? '';
+$age1 = $_REQUEST['age1'] ?? '';
+$age2 = $_REQUEST['age2'] ?? '';
 
 $p1 = $all != "" ? "AND (fname LIKE '%$all%' OR lname LIKE '%$all%' OR fname_eng LIKE '%$all%' OR lname_eng LIKE '%$all%' OR passport LIKE '%$all%' OR nickname LIKE '%$all%')" : "";
 $p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
@@ -55,6 +58,17 @@ $p3 = $labor_type != '' ? "AND gender = '$gender' " :'';
 $p4 = $labor_type != '' ? "AND data.pro_id = '$pro_id' " :'';
 $p5 = $labor_type != '' ? "AND data.dis_id = '$dis_id' " :'';
 $p6 = $labor_type != '' ? "AND data.vill_id = '$vill_id' " :'';
+$p7 = '';
+if($status != ''){
+    $p7 = "AND status = '$status' ";
+}
+$p8 = '';
+if($type == 'Date Of Birth'){
+    $p8 = "AND dob BETWEEN '$date1' AND '$date2' ";
+}else if($type == 'Register Date'){
+    $p8 = "AND register_date BETWEEN '$date1' AND '$date2' ";
+}
+$p9 = $age1 != '' && $age2 != '' ? "AND age BETWEEN '$age1' AND '$age2'" : '';
 // ພາກສ່ວນການປ່ຽນໜ້າ
 $limit = 500;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -75,7 +89,7 @@ vill_b.vill_name_lao as vill_name_b,
 data.pro_id_b,
 data.dis_id_b,
 data.vill_id_b
-FROM data_entry_korea as data
+FROM candidate_korea as data
 LEFT JOIN province as pro ON data.pro_id=pro.pro_id
 LEFT JOIN district as dis ON data.dis_id=dis.dis_id
 LEFT JOIN village as vill ON data.vill_id=vill.vill_id
@@ -83,20 +97,20 @@ LEFT JOIN village as vill ON data.vill_id=vill.vill_id
 LEFT JOIN province as pro_b ON data.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON data.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON data.vill_id_b=vill_b.vill_id 
-WHERE (sts_tb = 'vacancy' OR sts_save in('Verify','Pending','')) $p1 $p2 $p3 $p4 $p5 $p6
-ORDER BY id ASC
+WHERE (sts_save NOT IN ('Data Entry') OR sts_save IS NULL) $p1 $p2 $p3 $p4 $p5 $p6 $p7 $p8 $p9
+ORDER BY cid ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
-$total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
-WHERE sts_tb = 'vacancy' $p1 $p2 $p3 $p4 $p5 $p6");
+$total_result = $conn->prepare("SELECT COUNT(*) as total  FROM candidate_korea as data
+WHERE (sts_save NOT IN ('Data Entry') OR sts_save IS NULL) $p1 $p2 $p3 $p4 $p5 $p6 $p7 $p8 $p9");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
 $total_pages = ceil($total_row['total'] / $limit);
 
 $num = $offset + 1;
 // total
-$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data WHERE sts_tb = 'vacancy' $p1 $p2 $p3 $p4 $p5 $p6 ");
+$sql_total = $conn->prepare("SELECT COUNT(*) FROM candidate_korea as data WHERE (sts_save NOT IN ('Data Entry') OR sts_save IS NULL) $p1 $p2 $p3 $p4 $p5 $p6 $p7  $p8 $p9");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
@@ -140,7 +154,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         <div class="filter-bar row g-3 mb-3">
             <div class="col-md-4 filter-group">
                 <label for="all">ຄົ້ນຫາ</label>
-                <input type="text" name="all" id="all" placeholder="🔍 ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
+                <input type="text" name="all" id="all" placeholder="ຄົ້ນຫາຊື່ / ນາມສະກຸນ, Passport..." value="<?= $all ?>">
             </div>
 
             <div class="col-md-2 filter-group">
@@ -193,7 +207,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <select id="f3" name="type">
                     <option value="">ເລືອກ</option>
                     <option value="Date Of Birth" <?= $type == 'Date Of Birth' ? 'selected' : '' ?>>Date Of Birth</option>
-                    <option value="Interview Date" <?= $type == 'Interview Date' ? 'selected' : '' ?>>Register Date</option>
+                    <option value="Register Date" <?= $type == 'Register Date' ? 'selected' : '' ?>>Register Date</option>
                 </select>
             </div>
             <div class="col-md-2 filter-group">
@@ -203,6 +217,24 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-2 filter-group">
                 <label for="f3">From To</label>
                 <input type="date" name="date2" id="" value="<?= $date2 ?>">
+            </div>
+            <div class="col-md-2 filter-group">
+                <label for="f3">Status</label>
+                <select id="f3" name="status">
+                    <option value="">ເລືອກ</option>
+                    <option value="SINGLE" <?= $status == 'SINGLE' ? 'selected' : '' ?>>SINGLE</option>
+                    <option value="MARRIED" <?= $status == 'MARRIED' ? 'selected' : '' ?>>MARRIED</option>
+                    <option value="DIVORCED" <?= $status == 'DIVORCED' ? 'selected' : '' ?>>DIVORCED</option>
+                    <option value="MARRIED(COUPLE)" <?= $status == 'MARRIED(COUPLE)' ? 'selected' : '' ?>>MARRIED(COUPLE)</option>
+                </select>
+            </div>
+            <div class="col-md-1 filter-group">
+                <label for="f3">Age</label>
+                <input type="number" name="age1" id="" value="<?= $age1 ?>">
+            </div>
+            <div class="col-md-1 filter-group">
+                <label for="f3">To Age</label>
+                <input type="number" name="age2" id="" value="<?= $age2 ?>">
             </div>
             <div class="col-md-2 filter-group btn-mt">
                 <button type="submit" class="btn btn-secondary btn-sm"><i class="bi bi-search"></i> Search</button>
@@ -224,7 +256,7 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <th>ລຳດັບ</th>
                     <th style="width:100px;" class="text-center">ຈັດການ</th>
-                    <th class="sortable">ເລກທີລົງທະບຽນ</th>
+                    <th class="sortable">CID</th>
                     <th class="sortable">Status</th>
                     <th class="sortable">Name&Surname</th>
                     <th class="sortable">Nickname</th>
@@ -240,8 +272,6 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                     <th class="sortable">Height</th>
                     <th class="sortable">Shirt Size</th>
                     <th class="sortable">Status</th>
-                    <!-- <th class="sortable">Health_Check_Date</th>
-                    <th class="sortable">health_check</th> -->
                     <th class="sortable">Eng Village</th>
                     <th class="sortable">Lao Village</th>
                     <th class="sortable">Birth Village</th>
@@ -280,9 +310,8 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $num++; ?></td>
                             <td>
                                 <a href="form/vacancy_edit.php?id=<?= $row['id'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                                <!-- <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_vacancy"><i class="bi bi-trash"></i></button> -->
                             </td>
-                            <td><?= htmlspecialchars($row['data_id'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['cid'] ?? '') ?></td>
                             <td>
                                 <?php 
                                     $text = '';
@@ -293,6 +322,9 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                     }else if($row['sts_save'] == 'Pending' || $row['sts_save'] == ''){
                                         $text = 'Pending';
                                         $colors = 'warning text-light';
+                                    }else if($row['sts_save'] == 'Reject'){
+                                        $text = 'Reject';
+                                        $colors = 'danger';
                                     }
                                 ?>
                                 <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
@@ -311,8 +343,6 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($row['height'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['shirt_size'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-                            <!-- <td><?= htmlspecialchars($row['heal_date'] == null ? '' : date_format(date_create($row['heal_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['heal_sts'] ?? '') ?></td> -->
                             <td><?= htmlspecialchars($row['vill_name'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['vill_name_b'] ?? '') ?></td>
