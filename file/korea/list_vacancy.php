@@ -52,7 +52,15 @@ $status = $_REQUEST['status'] ?? '';
 $age1 = $_REQUEST['age1'] ?? '';
 $age2 = $_REQUEST['age2'] ?? '';
 
-$p1 = $all != "" ? "AND (fname LIKE '%$all%' OR lname LIKE '%$all%' OR fname_eng LIKE '%$all%' OR lname_eng LIKE '%$all%' OR passport LIKE '%$all%' OR nickname LIKE '%$all%')" : "";
+$p1 = $all != "" ? "AND (
+fname LIKE '%$all%' 
+OR lname LIKE '%$all%' 
+OR fname_eng LIKE '%$all%' 
+OR lname_eng LIKE '%$all%' 
+OR passport LIKE '%$all%' 
+OR nickname LIKE '%$all%' 
+OR CONCAT(fname, ' ', lname) LIKE '%$all%' 
+OR CONCAT(fname_eng, ' ', lname_eng) LIKE '%$all%')" : "";
 $p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
 $p3 = $labor_type != '' ? "AND gender = '$gender' " :'';
 $p4 = $labor_type != '' ? "AND data.pro_id = '$pro_id' " :'';

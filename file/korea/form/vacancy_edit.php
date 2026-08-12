@@ -323,7 +323,7 @@ $sql_tri->execute();
             </a>
             <?php if ($row['sts_save'] == 'Verify'): ?>
                 <button type="button" id="data_vacancy" class="btn btn-sm btn-success px-4">
-                    <i class="bi bi-floppy me-1"></i> Data Entry
+                    <i class="bi bi-floppy me-1"></i> Move to data entry.stage
                 </button>
             <?php else: ?>
                 <button type="button" id="verify_vacancy" class="btn btn-sm btn-warning px-4">

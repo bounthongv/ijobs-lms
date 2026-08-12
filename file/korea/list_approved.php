@@ -49,17 +49,17 @@ $type = $_REQUEST['type'] ?? '';
 $date1 = $_REQUEST['date1'] ?? '';
 $date2 = $_REQUEST['date2'] ?? '';
 
-$p1 = $all != "" ? "AND (cand.fname LIKE '%$all%' OR cand.lname LIKE '%$all%' OR cand.fname_eng LIKE '%$all%' OR cand.lname_eng LIKE '%$all%' OR cand.passport LIKE '%$all%' OR cand.nickname LIKE '%$all%')" : "";
-$p2 = $labor_type != '' ? "AND cand.labor_type = '$labor_type' " :'';
-$p3 = $gender != '' ? "AND cand.gender = '$gender' " :'';
+$p1 = $all != "" ? "AND (fname LIKE '%$all%' OR lname LIKE '%$all%' OR fname_eng LIKE '%$all%' OR lname_eng LIKE '%$all%' OR passport LIKE '%$all%' OR nickname LIKE '%$all%')" : "";
+$p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
+$p3 = $gender != '' ? "AND gender = '$gender' " :'';
 $p4 = $pro_id != '' ? "AND data.pro_id = '$pro_id' " :'';
 $p5 = $dis_id != '' ? "AND data.dis_id = '$dis_id' " :'';
 $p6 = $vill_id != '' ? "AND data.vill_id = '$vill_id' " :'';
 $p7 = '';
 if($type == 'Date Of Birth'){
-    $p7 = "AND cand.dob BETWEEN '$date1' AND '$date2' ";
+    $p7 = "AND dob BETWEEN '$date1' AND '$date2' ";
 }else if($type == 'Interview Date'){
-    $p7 = "AND cand.interview_date BETWEEN '$date1' AND '$date2' ";
+    $p7 = "AND interview_date BETWEEN '$date1' AND '$date2' ";
 }
 // ພາກສ່ວນການປ່ຽນໜ້າ
 $limit = 500;
@@ -90,14 +90,14 @@ LEFT JOIN village as vill ON cand.vill_id=vill.vill_id
 LEFT JOIN province as pro_b ON cand.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON cand.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON cand.vill_id_b=vill_b.vill_id 
-WHERE  cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7
+WHERE  sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7
 ORDER BY data_id ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
 $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
 INNER JOIN candidate_korea as cand ON data.data_id=cand.cid
-WHERE  cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+WHERE  sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
 $total_pages = ceil($total_row['total'] / $limit);
@@ -107,7 +107,7 @@ $num = $offset + 1;
 $sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data 
 INNER JOIN candidate_korea as cand ON data.data_id=cand.cid
 WHERE 
- cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+ sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
