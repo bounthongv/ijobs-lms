@@ -355,10 +355,18 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
+                <label class="form-label">CID <span class="required">*</span></label>
+                <input type="text" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>">
+            </div>
+            <div class="col-12 col-sm-4">
+                <label class="form-label">CIF <span class="required">*</span></label>
+                <input type="text" name="cif" class="form-control form-control-sm" value="<?=  $row['cid']."-01" ?>">
+            </div>
+            <div class="col-12 col-sm-4">
                 <label class="form-label">Interview Date <span class="required">*</span></label>
                 <input type="date" name="interview_date" class="form-control form-control-sm" value="<?= $row['interview_date'] ?>">
                 <input type="hidden" name="id" class="form-control form-control-sm" value="<?= $row['id'] ?>">
-                <input type="hidden" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>">
+                <!-- <input type="hidden" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>"> -->
             </div>
             <div class="col-12 col-sm-4">
                 <label class="form-label">Eng Sure Name <span class="required">*</span></label>

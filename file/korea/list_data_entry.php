@@ -235,15 +235,10 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                     <th>ລຳດັບ</th>
                     <th style="width:100px;" class="text-center">ຈັດການ</th>
                     <th>Status</th>
-                    <th>Certificate</th>
-                    <th>ໃບຢັ້ງຢືນທີ່ຢູ່</th>
-                    <th class="sortable">Picture</th>
-                    <th class="sortable">Passport</th>
-                    <th class="sortable">ໃບກະສິກອນ</th>
-                    <th class="sortable">Labor_contract</th>
-                    <th class="sortable">ຟອມສຳພາດ</th>
-                    <th class="sortable">ສຳມະໂນຄົວ</th>
-                    <th class="sortable">ຫຼັກຊັບຄ້ຳປະກັນ</th>
+                    <th>ຂໍ້ມູນສະຫມັກງານ</th>
+                    <th>ສໍາພາດງານ ແຮງງານລະດູການ</th>
+                    <th>CID</th>
+                    <th>cif</th>
                     <th>ສົ່ງເອກະສານ</th>
                     <th class="sortable">Name&Surname</th>
                     <th class="sortable">Nickname</th>
@@ -285,6 +280,15 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                     <th class="sortable">ແຮງງານ ມີຕົວເລືອກ</th>
                     <th class="sortable">Remark</th>
                     <th class="sortable">Interview Date</th>
+                    <th>Certificate</th>
+                    <th>ໃບຢັ້ງຢືນທີ່ຢູ່</th>
+                    <th class="sortable">Picture</th>
+                    <th class="sortable">Passport</th>
+                    <th class="sortable">ໃບກະສິກອນ</th>
+                    <th class="sortable">Labor_contract</th>
+                    <th class="sortable">ຟອມສຳພາດ</th>
+                    <th class="sortable">ສຳມະໂນຄົວ</th>
+                    <th class="sortable">ຫຼັກຊັບຄ້ຳປະກັນ</th>
                 </tr>
             </thead>
             <tbody id="userTbody">
@@ -315,8 +319,53 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
                             </td>
-                            <td><a href="print/print_certificate.php?cid=<?= $row['cid'] ?> ?>" target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td><a href="print/print_address.php?id=<?= $row['id'] ?> ?>" target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><a href="print/print_app_form.php?cid=<?= $row['cid'] ?> " target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><a href="form/interview_edit.php?cid=<?= $row['cid'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td><?= htmlspecialchars($row['cid'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['cif'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['coll_sts'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($full_name ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['nickname'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['phone1'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['phone2'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['fam_phone'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['nationality'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dob'] == null ? '' : date_format(date_create($row['dob']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['age'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['gender'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['weight'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['height'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['shirt_size'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['heal_date'] == null ? '' : date_format(date_create($row['heal_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['heal_sts'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['vill_name'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['vill_name_b'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dis_name'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dis_name_lao'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dis_name_b'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['pro_name'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['pro_name_lao'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['pro_name_b'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['family_book_no'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['family_book_date'] == null ? '' : date_format(date_create($row['family_book_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['unit'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['home'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['interview_location'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['passport'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['issue_date'] == null ? '' : date_format(date_create($row['issue_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['exp_date'] == null ? '' : date_format(date_create($row['exp_date']), 'd/m/Y')) ?></td>
+                            <td><?= htmlspecialchars($row['pay_sts'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['driver'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['agricu'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['interview_name'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['list_type'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['da_remark'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['interview_date'] == null ? '' : date_format(date_create($row['interview_date']), 'd/m/Y')) ?></td>
+                            <td><a href="print/print_certificate.php?cid=<?= $row['cid'] ?> " target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><a href="print/print_address.php?id=<?= $row['id'] ?> " target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
                             <td>
                                 <?php if (!empty($row['profile'])): ?>
                                     <a href="uploads/<?= $row['profile'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
@@ -366,47 +415,6 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                     </a>
                                 <?php endif ?>
                             </td>
-                            <td><?= htmlspecialchars($row['coll_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($full_name ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['nickname'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['phone1'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['phone2'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['fam_phone'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['nationality'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dob'] == null ? '' : date_format(date_create($row['dob']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['age'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['gender'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['weight'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['height'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['shirt_size'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['heal_date'] == null ? '' : date_format(date_create($row['heal_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['heal_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_no'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_date'] == null ? '' : date_format(date_create($row['family_book_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['unit'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['home'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_location'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['passport'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['issue_date'] == null ? '' : date_format(date_create($row['issue_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['exp_date'] == null ? '' : date_format(date_create($row['exp_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['pay_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['driver'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['agricu'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['list_type'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['da_remark'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_date'] == null ? '' : date_format(date_create($row['interview_date']), 'd/m/Y')) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 

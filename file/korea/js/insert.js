@@ -535,4 +535,57 @@ $(document).ready(function () {
             }
         });
     });
+    $("#inter_save").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#interviewForm")[0];
+        let formData = new FormData(form);
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_interview.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
+    $("#inter_save_print").on("click", function (e) {
+        e.preventDefault();
+        let form = $("#interviewForm")[0];
+        let formData = new FormData(form);
+        $.ajax({
+            type: "post",
+            url: "../insert/insert_n_update_interview.php",
+            data: formData,
+            dataType: "json",
+            contentType: false, 
+            processData: false,
+            success: function (response) {
+                if(response.sts === 'error'){
+                    showToast(response.message, 'error');
+                    return;
+                }else{
+                    showToast(response.message, 'success');
+                    setTimeout(function() {
+                        window.open('../print/print_interview.php?cid='+$("#cid").val());
+                    }, 2000);
+                }
+                
+            },
+            error: function (xhr, status, error) {
+                showToast('An error occurred: ' + error, 'error');
+            }
+        });
+    });
 });

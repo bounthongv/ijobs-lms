@@ -169,6 +169,7 @@ $dataEntry = [
     "doc_census"         => uploadFile("doc_census", $oldData['doc_census']),
     "doc_collateral"     => uploadFile("doc_collateral", $oldData['doc_collateral']),
 
+    "cif"   => getPost("cif"),
     "heal_date"   => getPost("heal_date"),
     "diagnose"    => getPost("diagnose"),
     "clinic"      => getPost("clinic"),
