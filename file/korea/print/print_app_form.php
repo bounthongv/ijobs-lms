@@ -201,7 +201,7 @@ ul.bullet-list li { margin-bottom: 3px; }
 }
 </style>
 
-<body>
+<body onload="print()">
 
     <div class="page-a4">
         <div class="container-fluid">
