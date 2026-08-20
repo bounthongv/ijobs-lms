@@ -49,7 +49,7 @@ $type = $_REQUEST['type'] ?? '';
 $date1 = $_REQUEST['date1'] ?? '';
 $date2 = $_REQUEST['date2'] ?? '';
 
-$p1 = $all != "" ? "AND (fname LIKE '%$all%' OR cand.lname LIKE '%$all%' OR cand.fname_eng LIKE '%$all%' OR cand.lname_eng LIKE '%$all%' OR cand.passport LIKE '%$all%' OR cand.nickname LIKE '%$all%')" : "";
+$p1 = $all != "" ? "AND (cand.fname LIKE \'%$all%\' OR cand.lname LIKE \'%$all%\' OR cand.fname_eng LIKE \'%$all%\' OR cand.lname_eng LIKE \'%$all%\' OR cand.passport LIKE \'%$all%\' OR cand.nickname LIKE \'%$all%\')" : "";
 $p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
 $p3 = $gender != '' ? "AND gender = '$gender' " :'';
 $p4 = $pro_id != '' ? "AND data.pro_id = '$pro_id' " :'';
