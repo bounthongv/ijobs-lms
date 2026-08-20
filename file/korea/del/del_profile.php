@@ -3,7 +3,7 @@
     $id = $_POST['id'];
 
     // 1. ดึงชื่อไฟล์เดิมจาก database ก่อน
-    $sqlSelect = "SELECT profile FROM data_entry_korea WHERE id = ?";
+    $sqlSelect = "SELECT profile FROM candidate_korea WHERE id = ?";
     $stmtSelect = $conn->prepare($sqlSelect);
     $stmtSelect->execute([$id]);
     $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
@@ -18,7 +18,7 @@
     }
 
     // 3. อัปเดต database ให้เป็น NULL
-    $sql = "UPDATE data_entry_korea SET profile = NULL WHERE id = ?";
+    $sql = "UPDATE candidate_korea SET profile = NULL WHERE id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt->execute([$id])) {
         echo 'success';

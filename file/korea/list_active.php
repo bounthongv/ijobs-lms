@@ -49,7 +49,7 @@ $type = $_REQUEST['type'] ?? '';
 $date1 = $_REQUEST['date1'] ?? '';
 $date2 = $_REQUEST['date2'] ?? '';
 
-$p1 = $all != "" ? "AND (cand.fname LIKE \'%$all%\' OR cand.lname LIKE \'%$all%\' OR cand.fname_eng LIKE \'%$all%\' OR cand.lname_eng LIKE \'%$all%\' OR cand.passport LIKE \'%$all%\' OR cand.nickname LIKE \'%$all%\')" : "";
+$p1 = $all != "" ? "AND (cand.fname LIKE '%$all%' OR cand.lname LIKE '%$all%' OR cand.fname_eng LIKE '%$all%' OR cand.lname_eng LIKE '%$all%' OR cand.passport LIKE '%$all%' OR cand.nickname LIKE '%$all%')" : "";
 $p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
 $p3 = $gender != '' ? "AND gender = '$gender' " :'';
 $p4 = $pro_id != '' ? "AND data.pro_id = '$pro_id' " :'';
@@ -89,7 +89,7 @@ LEFT JOIN province as pro_b ON cand.pro_id_b=pro_b.pro_id
 LEFT JOIN district as dis_b ON cand.dis_id_b=dis_b.dis_id
 LEFT JOIN village as vill_b ON cand.vill_id_b=vill_b.vill_id 
 INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
-WHERE cand.sts_data = \'Approve\' $p1 $p2 $p3 $p4 $p5 $p6 $p7
+WHERE cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7
 ORDER BY cid ASC
 LIMIT $limit OFFSET $offset");
 $sql->execute();
@@ -97,7 +97,7 @@ $sql->execute();
 $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
 INNER JOIN candidate_korea as cand ON cand.cid=data.data_id
 INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
-WHERE cand.sts_data = \'Approve\' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+WHERE cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $total_result->execute();
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
 $total_pages = ceil($total_row['total'] / $limit);
@@ -107,7 +107,7 @@ $num = $offset + 1;
 $sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data 
 INNER JOIN candidate_korea as cand ON cand.cid=data.data_id
 INNER JOIN labor_korea as labor ON data.data_id=labor.data_id
-WHERE cand.sts_data = \'Approve\' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
+WHERE cand.sts_data = 'Approve' $p1 $p2 $p3 $p4 $p5 $p6 $p7");
 $sql_total->execute();
 $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 

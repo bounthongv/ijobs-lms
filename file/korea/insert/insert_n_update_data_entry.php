@@ -38,8 +38,11 @@ function uploadFile($fieldName, $oldValue = null) {
 
     if (move_uploaded_file($_FILES[$fieldName]['tmp_name'], $targetPath)) {
 
-        if ($oldValue && file_exists($oldValue)) {
-            unlink($oldValue);
+        if ($oldValue) {
+            $oldPath = $uploadDir . basename($oldValue);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
         }
 
         return $newFileName;
@@ -95,11 +98,14 @@ $oldData = [
 ];
 
 if ($sub === "update" && $dataId) {
-    $sqlOld = "SELECT profile, file_form, doc_passport, doc_farmer_cert,
-                      doc_labor_contract, doc_census, doc_collateral
-               FROM data_entry_korea WHERE data_id = :data_id";
+        $sqlOld = "SELECT cand.profile, data.file_form, data.doc_passport,
+                 data.doc_farmer_cert, data.doc_labor_contract,
+                 data.doc_census, data.doc_collateral
+             FROM candidate_korea AS cand
+             LEFT JOIN data_entry_korea AS data ON data.data_id = cand.cid
+             WHERE cand.cid = :cid";
     $stmtOld = $conn->prepare($sqlOld);
-    $stmtOld->bindParam(":data_id", $dataId);
+        $stmtOld->bindParam(":cid", $cid);
     $stmtOld->execute();
     $fetched = $stmtOld->fetch(PDO::FETCH_ASSOC);
 
@@ -153,6 +159,7 @@ $dataCandidate = [
     "dis_id_b"  => getPost("dis_id_b"),
     "vill_id_b" => getPost("vill_id_b"),
     "sts_data"  => getPost("sts_data"),
+    "profile"   => uploadFile("profile", $oldData['profile']),
 ];
 
 // ===================================================
