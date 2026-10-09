@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../../../connect.php';
+require_once __DIR__ . '/interview_status.php';
 
 // ===================================================
 // ຟັງຊັນຊ່ວຍດຶງຄ່າຈາກ POST (ຖ້າບໍ່ມີ ຫຼື ຫວ່າງ ໃຫ້ເປັນ null)
@@ -130,6 +131,9 @@ try {
             $up->execute([':cif' => $cif, ':cid' => $cid]);
         }
     }
+
+    // ປັບສະຖານະການສຳພາດ (ຢືນຢັນຄົບ 7 ຟອມ = Finished)
+    refreshInterviewStatus($conn, $cid);
 
     echo json_encode([
         'message' => $msg,

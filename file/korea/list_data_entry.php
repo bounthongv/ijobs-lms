@@ -306,9 +306,16 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                         $colors = 'warning text-light';
                                     }
                                 ?>
-                                <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
+                                <div class="badge badge-approve bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
                             </td>
-                            <td></td>
+                            <?php // ສະຖານະການສຳພາດ (ຢືນຢັນຄົບ 7 ຟອມ = Finished) ?>
+                            <td>
+                                <?php if (($row['sts_interview'] ?? 'Pending') === 'Finished'): ?>
+                                    <div class="badge badge-interview bg-success" style="font-size: 14px;">Finished</div>
+                                <?php else: ?>
+                                    <div class="badge badge-interview bg-warning text-light" style="font-size: 14px;">Pending</div>
+                                <?php endif ?>
+                            </td>
                             <td><?= $num++; ?></td>
                             <td><?= htmlspecialchars($row['cid'] ?? '') ?></td>
                             <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
@@ -490,7 +497,48 @@ include_once('footer.php');
     $(document).ready(function () {
         // ເລືອກທັງໝົດໃນຕາຕະລາງ (Select All)
         $("#checkAll").on("change", function () {
-            $("#userTbody .row-check").prop("checked", $(this).prop("checked"));
+            $("#userTbody .row-check:not(:disabled)").prop("checked", $(this).prop("checked"));
+        });
+
+        // ===================================================
+        // ອະນຸມັດດ້ວຍການຕິກ checkbox ຄໍລໍາແລກ
+        // ເງື່ອນໄຂ: ສະຖານະການສຳພາດຕ້ອງເປັນ Finished (ຢືນຢັນຄົບ 7 ຟອມ)
+        // ===================================================
+        $("#userTbody").on("change", ".row-check", function () {
+            if (!this.checked) {
+                return;
+            }
+
+            let $cb = $(this);
+            let cid = $cb.val();
+
+            $.ajax({
+                type: "post",
+                url: "insert/approve_candidate.php",
+                data: { cid: cid },
+                dataType: "json",
+                success: function (response) {
+                    if (response.sts === 'error') {
+                        showToast(response.message, 'error');
+                        $cb.prop("checked", false);
+                        return;
+                    }
+
+                    showToast(response.message, 'success');
+
+                    // ອັບເດດ badge ໃນແຖວນັ້ນ
+                    $cb.closest("tr").find(".badge-approve")
+                        .removeClass("bg-warning text-light")
+                        .addClass("bg-success")
+                        .text("Approve");
+
+                    $cb.prop("disabled", true);
+                },
+                error: function (xhr, status, error) {
+                    showToast('An error occurred: ' + error, 'error');
+                    $cb.prop("checked", false);
+                }
+            });
         });
 
         // ฟังก์ชันโหลดเมือง
