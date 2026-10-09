@@ -24,6 +24,13 @@
         });
       });
   });
+  // ເລີ່ມຕົ້ນ Dropdown ຂອງ Bootstrap ຫຼັງຈາກ Script ໂຫຼດສຳເລັດ
+  document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (element) {
+    if (window.bootstrap && !bootstrap.Dropdown.getInstance(element)) {
+      new bootstrap.Dropdown(element);
+    }
+  });
+
   function toggleSidebar() {
     const width = window.innerWidth;
     const body = document.body;

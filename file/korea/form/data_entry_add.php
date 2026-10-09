@@ -98,9 +98,7 @@ $sql_tri->execute();
         color: #fff;
     }
 
-    .required {
-        color: #e24b4a;
-    }
+    
 
     .form-hint {
         font-size: 11px;

@@ -1,7 +1,7 @@
 
 <?php
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/file/korea/');
+    define('BASE_URL', base_url_path(__DIR__ . '/'));
     // define('BASE_URL', 'http://localhost:81/project_person_card/file/');
 }
 

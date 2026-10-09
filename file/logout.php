@@ -5,6 +5,6 @@
     unset($_SESSION['checked']);
     unset($_SESSION['status']);
     session_destroy();
-    header("Location:/");
+    header("Location:" . project_root_url());
     exit();
 ?>

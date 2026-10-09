@@ -1,8 +1,8 @@
 <?php 
   include_once('check.php');
   if (!defined('BASE_URLS')) {
-    define('BASE_URLS', '/file/');
-    define('BASE_URLSS', '/file/');
+    define('BASE_URLS', base_url_path(__DIR__ . '/'));
+    define('BASE_URLSS', base_url_path(__DIR__ . '/'));
   }
 ?>
 <!DOCTYPE html>
@@ -14,6 +14,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="<?= BASE_URLS ?>assets/css/lms-ui.css?v=<?= filemtime(__DIR__ . '/assets/css/lms-ui.css') ?>" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -163,6 +164,17 @@
     }
 
     .topbar-left { display: flex; align-items: center; padding-left: 20px; height: 100%; }
+    .topbar-divider { width: 1px; height: 26px; background: #e5e9f2; margin: 0 16px 0 8px; }
+    .topbar-breadcrumb { color: var(--theme-blue); font-size: 14px; font-weight: 500; }
+    .topbar-user { display: flex; align-items: center; gap: 10px; padding-right: 22px; color: #334155; }
+    .topbar-avatar { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--theme-blue); color: #fff; font-size: 17px; }
+    .topbar-user-name { font-size: 13px; font-weight: 600; }
+    .topbar-user-caret { color: #64748b; font-size: 11px; }
+    @media (max-width: 576px) {
+      .topbar-user-name, .topbar-user-caret { display: none; }
+      .topbar-user { padding-right: 12px; }
+      .topbar-divider { margin-right: 10px; }
+    }
 
     .btn-hamburger {
       background: none; border: none; color: #64748b; font-size: 24px;
@@ -304,11 +316,14 @@ button.nav-item[aria-expanded="true"] .nav-caret { transform: rotate(180deg); }
 
   <div class="sidebar-menu-scroll">
     <div style="padding: 8px 0;">
-      <a href="<?= BASE_URLS ?>" class="nav-item active"><span class="nav-text">Dashboard</span></a>
+      <div class="nav-label">Overview</div>
+      <a href="<?= BASE_URLS ?>" class="nav-item active"><i class="bi bi-speedometer2 nav-icon"></i><span class="nav-text">Dashboard</span></a>
+      <div class="nav-label">Recruitment</div>
       <a href="<?= BASE_URLS ?>korea/" class="nav-item "><img src="https://flagcdn.com/w40/kr.png" class="nav-flag"><span class="nav-text">Korea</span></a>
       <a href="<?= BASE_URLS ?>thai/" class="nav-item"><img src="https://flagcdn.com/w40/th.png" class="nav-flag"><span class="nav-text">Thailand</span></a>
       <a href="<?= BASE_URLS ?>japan/" class="nav-item"><img src="https://flagcdn.com/w40/jp.png" class="nav-flag"><span class="nav-text">Japan</span></a>
       <a href="<?= BASE_URLS ?>china/" class="nav-item"><img src="https://flagcdn.com/w40/cn.png" class="nav-flag"><span class="nav-text">China</span></a>
+      <div class="nav-label">Master Data</div>
       <!-- ===== เมนูใหม่: Data List (มี dropdown) ===== -->
       <button class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#dataListCollapse" aria-expanded="false" aria-controls="dataListCollapse">
         <img src="https://flagcdn.com/w40/la.png" class="nav-flag">
@@ -329,7 +344,8 @@ button.nav-item[aria-expanded="true"] .nav-caret { transform: rotate(180deg); }
           <span class="nav-text">Lao Tribes</span>
         </a>
       </div>
-      <!-- ===== จบเมนู Data List ===== -->
+            <!-- ===== จบเมนู Data List ===== -->
+      <div class="nav-label">Administration</div>
       <a href="<?= BASE_URLS ?>user/" class="nav-item"><img src="https://th.bing.com/th/id/R.b2b34517339101a111716be1c203f354?rik=e5WHTShSpipi3Q&pid=ImgRaw&r=0" class="nav-flag"><span class="nav-text">Users</span></a>
     </div>
   </div>
@@ -342,10 +358,15 @@ button.nav-item[aria-expanded="true"] .nav-caret { transform: rotate(180deg); }
 <div id="main-content">
   <header class="topbar">
     <div class="topbar-left">
-      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+      <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation"><i class="bi bi-list"></i></button>
+      <span class="topbar-divider"></span>
+      <span class="topbar-breadcrumb">Dashboard</span>
     </div>
-
-    
+    <div class="topbar-user">
+      <span class="topbar-avatar"><i class="bi bi-person-fill"></i></span>
+      <span class="topbar-user-name"><?= htmlspecialchars($_SESSION['fname'] . ' ' . $_SESSION['lname']) ?></span>
+      <i class="bi bi-chevron-down topbar-user-caret"></i>
+    </div>
   </header>
 
   <div class="container-fluid p-4">

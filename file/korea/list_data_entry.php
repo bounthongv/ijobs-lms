@@ -49,66 +49,92 @@ $type = $_REQUEST['type'] ?? '';
 $date1 = $_REQUEST['date1'] ?? '';
 $date2 = $_REQUEST['date2'] ?? '';
 
-$p1 = $all != "" ? "AND (cand.fname LIKE '%$all%' OR cand.lname LIKE '%$all%' OR cand.fname_eng LIKE '%$all%' OR cand.lname_eng LIKE '%$all%' OR cand.passport LIKE '%$all%' OR cand.nickname LIKE '%$all%')" : "";
-$p2 = $labor_type != '' ? "AND labor_type = '$labor_type' " :'';
-$p3 = $gender != '' ? "AND gender = '$gender' " :'';
-$p4 = $pro_id != '' ? "AND data.pro_id = '$pro_id' " :'';
-$p5 = $dis_id != '' ? "AND data.dis_id = '$dis_id' " :'';
-$p6 = $vill_id != '' ? "AND data.vill_id = '$vill_id' " :'';
-$p7 = '';
-if($type == 'Date Of Birth'){
-    $p7 = "AND dob BETWEEN '$date1' AND '$date2' ";
-}else if($type == 'Interview Date'){
-    $p7 = "AND interview_date BETWEEN '$date1' AND '$date2' ";
+// ສ້າງເງື່ອນໄຂ WHERE ແລະ ຄ່າ bind ສຳລັບ Prepared Statement
+$where = ["cand.sts_save IN ('Data Entry')"];
+$params = [];
+
+if ($all != "") {
+    $where[] = "(cand.fname LIKE :all1 OR cand.lname LIKE :all2 OR cand.fname_eng LIKE :all3
+        OR cand.lname_eng LIKE :all4 OR cand.passport LIKE :all5 OR cand.nickname LIKE :all6)";
+    for ($i = 1; $i <= 6; $i++) {
+        $params[":all$i"] = "%$all%";
+    }
 }
+if ($labor_type != '') {
+    $where[] = "cand.labor_type = :labor_type";
+    $params[':labor_type'] = $labor_type;
+}
+if ($gender != '') {
+    $where[] = "cand.gender = :gender";
+    $params[':gender'] = $gender;
+}
+if ($pro_id != '') {
+    $where[] = "cand.pro_id = :pro_id";
+    $params[':pro_id'] = $pro_id;
+}
+if ($dis_id != '') {
+    $where[] = "cand.dis_id = :dis_id";
+    $params[':dis_id'] = $dis_id;
+}
+if ($vill_id != '') {
+    $where[] = "cand.vill_id = :vill_id";
+    $params[':vill_id'] = $vill_id;
+}
+if ($date1 != '' && $date2 != '') {
+    if ($type == 'Date Of Birth') {
+        $where[] = "cand.dob BETWEEN :date1 AND :date2";
+        $params[':date1'] = $date1;
+        $params[':date2'] = $date2;
+    } else if ($type == 'Interview Date') {
+        $where[] = "cand.interview_date BETWEEN :date1 AND :date2";
+        $params[':date1'] = $date1;
+        $params[':date2'] = $date2;
+    }
+}
+$whereSql = implode(' AND ', $where);
 // ພາກສ່ວນການປ່ຽນໜ້າ
 $limit = 500;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-$sql = $conn->prepare("SELECT *,
--- ປັດຈຸບັນ
-pro.pro_name_lao as pro_name_lao,
-dis.dis_name_lao as dis_name_lao,
-vill.vill_name_lao as vill_name_lao,
-pro.pro_id as pro_id,
-dis.dis_id as dis_id,
-vill.vill_id as vill_id,
--- ບ່ອນເກີດ
-pro_b.pro_name_lao as pro_name_b,
-dis_b.dis_name_lao as dis_name_b,
-vill_b.vill_name_lao as vill_name_b,
-cand.pro_id_b,
-cand.dis_id_b,
-cand.vill_id_b
-FROM data_entry_korea as data
-RIGHT JOIN candidate_korea as cand ON data.data_id=cand.cid
+$sql = $conn->prepare("SELECT
+cand.*,
+pro.pro_name_lao,
+dis.dis_name_lao,
+vill.vill_name_lao,
+COALESCE(ip.project_code, (SELECT code FROM labor_korea WHERE data_id = cand.cid LIMIT 1)) AS project_code,
+ip.sts_save AS personal_sts,
+ph.sts_save AS physical_sts,
+ex.sts_save AS experience_sts,
+at.sts_save AS attitude_sts,
+gn.sts_save AS general_sts,
+cl.sts_save AS collateral_sts,
+asmt.sts_save AS assessment_sts
+FROM candidate_korea as cand
 LEFT JOIN province as pro ON cand.pro_id=pro.pro_id
 LEFT JOIN district as dis ON cand.dis_id=dis.dis_id
 LEFT JOIN village as vill ON cand.vill_id=vill.vill_id
-
-LEFT JOIN province as pro_b ON cand.pro_id_b=pro_b.pro_id
-LEFT JOIN district as dis_b ON cand.dis_id_b=dis_b.dis_id
-LEFT JOIN village as vill_b ON cand.vill_id_b=vill_b.vill_id 
-WHERE cand.sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7
-ORDER BY cid ASC
+LEFT JOIN interview_personal as ip ON ip.data_id=cand.cid
+LEFT JOIN interview_physical as ph ON ph.data_id=cand.cid
+LEFT JOIN interview_experience as ex ON ex.data_id=cand.cid
+LEFT JOIN interview_attitude as at ON at.data_id=cand.cid
+LEFT JOIN interview_general as gn ON gn.data_id=cand.cid
+LEFT JOIN interview_collateral as cl ON cl.data_id=cand.cid
+LEFT JOIN interview_assessment as asmt ON asmt.data_id=cand.cid
+WHERE $whereSql
+ORDER BY cand.cid ASC
 LIMIT $limit OFFSET $offset");
-$sql->execute();
+$sql->execute($params);
 // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
-$total_result = $conn->prepare("SELECT COUNT(*) as total  FROM data_entry_korea as data
-LEFT JOIN candidate_korea as cand ON data.data_id=cand.cid
-WHERE cand.sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7");
-$total_result->execute();
+$total_result = $conn->prepare("SELECT COUNT(*) as total
+FROM candidate_korea as cand
+WHERE $whereSql");
+$total_result->execute($params);
 $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
-$total_pages = ceil($total_row['total'] / $limit);
+$total = $total_row['total'];
+$total_pages = ceil($total / $limit);
 
 $num = $offset + 1;
-// total
-$sql_total = $conn->prepare("SELECT COUNT(*) FROM data_entry_korea as data
-LEFT JOIN candidate_korea as cand ON data.data_id=cand.cid
-WHERE cand.sts_save IN ('Data Entry') $p1 $p2 $p3 $p4 $p5 $p6 $p7");
-$sql_total->execute();
-$total = $sql_total->fetch(PDO::FETCH_NUM)[0];
 
 // province
 $sql_pro = $conn->prepare("SELECT * FROM province ORDER BY pro_id ASC");
@@ -232,81 +258,44 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
         <table class="usr-table" id="userTable">
             <thead>
                 <tr>
+                    <th class="text-center" style="width:130px;">
+                        <label class="mb-0" style="font-weight:600; cursor:pointer;">
+                            <input type="checkbox" id="checkAll"> ເລືອກທັງໝົດ
+                        </label>
+                    </th>
+                    <th>ສະຖານະ ການອານຸມັດ</th>
+                    <th>ສະຖານະ ການສຳພາດ</th>
                     <th>ລຳດັບ</th>
-                    <th style="width:100px;" class="text-center">ຈັດການ</th>
-                    <th>Status</th>
-                    <th>ຂໍ້ມູນສະຫມັກງານ</th>
-                    <th>ສໍາພາດງານ ແຮງງານລະດູການ</th>
                     <th>CID</th>
-                    <th>cif</th>
-                    <th>ສົ່ງເອກະສານ</th>
-                    <th class="sortable">Name&Surname</th>
-                    <th class="sortable">Nickname</th>
-                    <th class="sortable">Name&SurnameLao</th>
-                    <th class="sortable">Phone NO1</th>
-                    <th class="sortable">Phone NO2</th>
-                    <th class="sortable">Fam Phone NO</th>
-                    <th class="sortable">Nationality</th>
-                    <th class="sortable">Date of birth </th>
-                    <th class="sortable">Age</th>
-                    <th class="sortable">Gender</th>
-                    <th class="sortable">Weight</th>
-                    <th class="sortable">Height</th>
-                    <th class="sortable">Shirt Size</th>
-                    <th class="sortable">Status</th>
-                    <th class="sortable">Health_Check_Date</th>
-                    <th class="sortable">health_check</th>
-                    <th class="sortable">Eng Village</th>
-                    <th class="sortable">Lao Village</th>
-                    <th class="sortable">Birth Village</th>
-                    <th class="sortable">Eng District</th>
-                    <th class="sortable">Lao District</th>
-                    <th class="sortable">Birth District</th>
-                    <th class="sortable">Eng Province</th>
-                    <th class="sortable">Lao Province</th>
-                    <th class="sortable">Birth Province</th>
-                    <th class="sortable">Family book NO</th>
-                    <th class="sortable">Family book Date</th>
-                    <th class="sortable">Unit</th>
-                    <th class="sortable">Home NO</th>
-                    <th class="sortable">Interview Location</th>
-                    <th class="sortable">Passport NO </th>
-                    <th class="sortable">Issue Date</th>
-                    <th class="sortable">Exp date</th>
-                    <th class="sortable">Loan</th>
-                    <th class="sortable">Driver License</th>
-                    <th class="sortable">experience</th>
-                    <th class="sortable">Interview Name</th>
-                    <th class="sortable">ແຮງງານ ມີຕົວເລືອກ</th>
-                    <th class="sortable">Remark</th>
-                    <th class="sortable">Interview Date</th>
-                    <th>Certificate</th>
-                    <th>ໃບຢັ້ງຢືນທີ່ຢູ່</th>
-                    <th class="sortable">Picture</th>
-                    <th class="sortable">Passport</th>
-                    <th class="sortable">ໃບກະສິກອນ</th>
-                    <th class="sortable">Labor_contract</th>
-                    <th class="sortable">ຟອມສຳພາດ</th>
-                    <th class="sortable">ສຳມະໂນຄົວ</th>
-                    <th class="sortable">ຫຼັກຊັບຄ້ຳປະກັນ</th>
+                    <th>ຊື່ ແລະ ນາມສະກຸນ</th>
+                    <th>ເບີໂທຕິດຕໍ່</th>
+                    <th>Passport</th>
+                    <th>project code/Job No.</th>
+                    <th>ບ້ານ</th>
+                    <th>ເມືອງ</th>
+                    <th>ແຂວງ</th>
+                    <th>ຂໍ້ມູນສ່ວນຕົວ (PERSONAL INFORMATION)</th>
+                    <th>ດ້ານຮ່າງກາຍ (Physical)</th>
+                    <th>ປະສົບການ ເຮັດວຽກ (Work Experience)</th>
+                    <th>ທັດສະນະຄະຕິ ແລະ ທັກສະອື່ນ</th>
+                    <th>ຄຳຖາມສຳພາດທົ່ວໄປ</th>
+                    <th>ສຳພາດ ຫຼັກຊັບ</th>
+                    <th>ຜົນການປະເມິນຂອງຜູ້ສຳພາດ (INTERVIEWER ASSESSMENT)</th>
                 </tr>
             </thead>
             <tbody id="userTbody">
                 
                    
-                    <?php foreach ($sql as $i => $row):
+                    <?php foreach ($sql as $row):
                         $part = $row['gender'] == 'F' ? 'ນ. ' : 'ທ. ';
                         $full_name_lao = $part.$row['fname']." ".$row['lname'];
-                        $full_name = $row['fname_eng']." ".$row['lname_eng'];
                     ?>
                         <tr>
-                            <td><?= $num++; ?></td>
-                            <td>
-                                <a href="form/data_entry_edit.php?cid=<?= $row['cid'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                                <!-- <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm del_data"><i class="bi bi-trash"></i></button> -->
+                            <td class="text-center">
+                                <input type="checkbox" class="row-check" value="<?= htmlspecialchars($row['cid'] ?? '') ?>">
                             </td>
                             <td>
-                                <?php 
+                                <?php
                                     $text = '';
                                     $colors = '';
                                     if($row['sts_data'] == 'Approve'){
@@ -319,99 +308,121 @@ $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="badge bg-<?= $colors ?>" style="font-size: 14px;"><?= $text ?></div>
                             </td>
-                            <td><a href="print/print_app_form.php?cid=<?= $row['cid'] ?> " target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td><a href="form/interview_edit.php?cid=<?= $row['cid'] ?>" class="btn-edit"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td></td>
+                            <td><?= $num++; ?></td>
                             <td><?= htmlspecialchars($row['cid'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['cif'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['coll_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($full_name ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['nickname'] ?? '') ?></td>
                             <td><?= htmlspecialchars($full_name_lao ?? '') ?></td>
                             <td><?= htmlspecialchars($row['phone1'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['phone2'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['fam_phone'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['nationality'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dob'] == null ? '' : date_format(date_create($row['dob']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['age'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['gender'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['weight'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['height'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['shirt_size'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['heal_date'] == null ? '' : date_format(date_create($row['heal_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['heal_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['vill_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['dis_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name_lao'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['pro_name_b'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_no'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['family_book_date'] == null ? '' : date_format(date_create($row['family_book_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['unit'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['home'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_location'] ?? '') ?></td>
                             <td><?= htmlspecialchars($row['passport'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['issue_date'] == null ? '' : date_format(date_create($row['issue_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['exp_date'] == null ? '' : date_format(date_create($row['exp_date']), 'd/m/Y')) ?></td>
-                            <td><?= htmlspecialchars($row['pay_sts'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['driver'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['agricu'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['list_type'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['da_remark'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['interview_date'] == null ? '' : date_format(date_create($row['interview_date']), 'd/m/Y')) ?></td>
-                            <td><a href="print/print_certificate.php?cid=<?= $row['cid'] ?> " target="_blank" class="btn btn-outline-warning  btn-sm"><i class="bi bi-printer"></i></a></td>
-                            <td><a href="print/print_address.php?id=<?= $row['id'] ?> " target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-printer"></i></a></td>
+                            <td><?= htmlspecialchars($row['project_code'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['vill_name_lao'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['dis_name_lao'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($row['pro_name_lao'] ?? '') ?></td>
+                            <?php // ລະຫັດ cid ຂອງແຖວນີ້ (ໃຊ້ສຳລັບປຸ່ມຕ່າງໆ)
+                            $btn_cid = htmlspecialchars($row['cid'] ?? '');
+                            ?>
+                            <?php // ຂໍ້ມູນສ່ວນຕົວ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['profile'])): ?>
-                                    <a href="uploads/<?= $row['profile'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['personal_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_personal_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ດ້ານຮ່າງກາຍ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['doc_passport'])): ?>
-                                    <a href="uploads/<?= $row['doc_passport'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['physical_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_physical_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ປະສົບການເຮັດວຽກ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['doc_farmer_cert'])): ?>
-                                    <a href="uploads/<?= $row['doc_farmer_cert'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['experience_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_experience_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ທັດສະນະຄະຕິ ແລະ ທັກສະອື່ນ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['doc_labor_contract'])): ?>
-                                    <a href="uploads/<?= $row['doc_labor_contract'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['attitude_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_attitude_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ຄຳຖາມສຳພາດທົ່ວໄປ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['file_form'])): ?>
-                                    <a href="uploads/<?= $row['file_form'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['general_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_general_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ສຳພາດ ຫຼັກຊັບ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['doc_census'])): ?>
-                                    <a href="uploads/<?= $row['doc_census'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['collateral_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_collateral_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
+                            <?php // ຜົນການປະເມີນຂອງຜູ້ສຳພາດ: ຖ້າ Verify ແລ້ວ ໃຫ້ສະແດງເຄື່ອງໝາຍຕິກຖືກ ແທນປຸ່ມແກ້ໄຂ ?>
                             <td>
-                                <?php if (!empty($row['doc_collateral'])): ?>
-                                    <a href="uploads/<?= $row['doc_collateral'] ?>?t=<?= time() ?>" class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer">
-                                        <i class="fa-solid fa-images"></i>
+                                <a href="print/print_interview.php?cid=<?= $btn_cid ?>" target="_blank" class="btn btn-outline-warning btn-sm" title="ພິມ">
+                                    <i class="bi bi-printer"></i>
+                                </a>
+                                <?php if (($row['assessment_sts'] ?? '') === 'Verify'): ?>
+                                    <span class="text-success" title="ຢືນຢັນແລ້ວ" style="font-size:20px; vertical-align:middle;">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+                                <?php else: ?>
+                                    <a href="form/interview_assessment_edit.php?cid=<?= $btn_cid ?>" class="btn-edit" title="ແກ້ໄຂ">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
                                 <?php endif ?>
                             </td>
@@ -477,6 +488,11 @@ include_once('footer.php');
 ?>
 <script>
     $(document).ready(function () {
+        // ເລືອກທັງໝົດໃນຕາຕະລາງ (Select All)
+        $("#checkAll").on("change", function () {
+            $("#userTbody .row-check").prop("checked", $(this).prop("checked"));
+        });
+
         // ฟังก์ชันโหลดเมือง
         function loadDistricts(pro_id, selected_dis_id = '') {
             if (!pro_id) {

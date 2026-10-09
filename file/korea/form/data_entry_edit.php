@@ -149,9 +149,7 @@ $sql_tri->execute();
         color: #fff;
     }
 
-    .required {
-        color: #e24b4a;
-    }
+    
 
     .form-hint {
         font-size: 11px;
@@ -257,9 +255,7 @@ $sql_tri->execute();
         font-size: 0.85rem;
     }
 
-    .asterisk {
-        color: #dc3545;
-    }
+    
 
     /* สไตล์สำหรับรูปภาพ Preview */
     .preview-img {
@@ -355,65 +351,65 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">CID <span class="required">*</span></label>
+                <label class="form-label">CID :</label>
                 <input type="text" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">CIF <span class="required">*</span></label>
+                <label class="form-label">CIF :</label>
                 <input type="text" name="cif" class="form-control form-control-sm" value="<?=  $row['cid']."-01" ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Interview Date <span class="required">*</span></label>
+                <label class="form-label">Interview Date :</label>
                 <input type="date" name="interview_date" class="form-control form-control-sm" value="<?= $row['interview_date'] ?>">
                 <input type="hidden" name="id" class="form-control form-control-sm" value="<?= $row['id'] ?>">
                 <!-- <input type="hidden" name="cid" class="form-control form-control-sm" value="<?= $row['cid'] ?>"> -->
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Eng Sure Name <span class="required">*</span></label>
+                <label class="form-label">Eng Sure Name :</label>
                 <input type="text" name="lname_eng" class="form-control form-control-sm" value="<?= $row['lname_eng'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Eng Name <span class="required">*</span></label>
+                <label class="form-label">Eng Name :</label>
                 <input type="text" name="fname_eng" class="form-control form-control-sm" value="<?= $row['fname_eng'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Nickname <span class="required">*</span></label>
+                <label class="form-label">Nickname :</label>
                 <input type="text" name="nickname" class="form-control form-control-sm" value="<?= $row['nickname'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Lao Name <span class="required">*</span></label>
+                <label class="form-label">Lao Name :</label>
                 <input type="text" name="fname" class="form-control form-control-sm" value="<?= $row['fname'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Lao Sure Name <span class="required">*</span></label>
+                <label class="form-label">Lao Sure Name :</label>
                 <input type="text" name="lname" class="form-control form-control-sm" value="<?= $row['lname'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Phone NO1 <span class="required">*</span></label>
+                <label class="form-label">Phone NO1 :</label>
                 <input type="text" name="phone1" class="form-control form-control-sm" value="<?= $row['phone1'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Phone NO2 <span class="required">*</span></label>
+                <label class="form-label">Phone NO2 :</label>
                 <input type="text" name="phone2" class="form-control form-control-sm" value="<?= $row['phone2'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Fam Phone NO <span class="required">*</span></label>
+                <label class="form-label">Fam Phone NO :</label>
                 <input type="text" name="fam_phone" class="form-control form-control-sm" value="<?= $row['fam_phone'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Nationality <span class="required">*</span></label>
+                <label class="form-label">Nationality :</label>
                 <input type="text" name="nationality" class="form-control form-control-sm" value="<?= $row['nationality'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Date of birth <span class="required">*</span></label>
+                <label class="form-label">Date of birth :</label>
                 <input type="date" name="dob" id="dob" class="form-control form-control-sm" value="<?= $row['dob'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Age <span class="required">*</span></label>
+                <label class="form-label">Age :</label>
                 <input type="text" name="age" id="age" class="form-control form-control-sm" value="<?= $row['age'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Gender <span class="required">*</span></label>
+                <label class="form-label">Gender :</label>
                 <select name="gender" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <option value="F" <?= $row['gender'] == 'F' ? 'selected' : '' ?>>ຍິງ</option>
@@ -421,7 +417,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Status <span class="required">*</span></label>
+                <label class="form-label">Status :</label>
                 <select name="status" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <option value="SINGLE" <?= $row['status'] == 'SINGLE' ? 'selected' : '' ?>>SINGLE</option>
@@ -431,51 +427,51 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Weight <span class="required">*</span></label>
+                <label class="form-label">Weight :</label>
                 <input type="text" name="weight" class="form-control form-control-sm" value="<?= $row['weight'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Height <span class="required">*</span></label>
+                <label class="form-label">Height :</label>
                 <input type="text" name="height" class="form-control form-control-sm" value="<?= $row['height'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">family book NO <span class="required">*</span></label>
+                <label class="form-label">family book NO :</label>
                 <input type="text" name="family_book_no" class="form-control form-control-sm" value="<?= $row['family_book_no'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">family book Date <span class="required">*</span></label>
+                <label class="form-label">family book Date :</label>
                 <input type="date" name="family_book_date" class="form-control form-control-sm" value="<?= $row['family_book_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Father Name <span class="required">*</span></label>
+                <label class="form-label">Father Name :</label>
                 <input type="text" name="father" class="form-control form-control-sm" value="<?= $row['father'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Mother Name <span class="required">*</span></label>
+                <label class="form-label">Mother Name :</label>
                 <input type="text" name="mother" class="form-control form-control-sm" value="<?= $row['mother'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Unit <span class="required">*</span></label>
+                <label class="form-label">Unit :</label>
                 <input type="text" name="unit" class="form-control form-control-sm" value="<?= $row['unit'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Home NO <span class="required">*</span></label>
+                <label class="form-label">Home NO :</label>
                 <input type="text" name="home" class="form-control form-control-sm" value="<?= $row['home'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Passport NO <span class="required">*</span></label>
+                <label class="form-label">Passport NO :</label>
                 <input type="text" name="passport" class="form-control form-control-sm" value="<?= $row['passport'] ?>" required>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Issue Date <span class="required">*</span></label>
+                <label class="form-label">Issue Date :</label>
                 <input type="date" name="issue_date" class="form-control form-control-sm" value="<?= $row['issue_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Exp date <span class="required">*</span></label>
+                <label class="form-label">Exp date :</label>
                 <input type="date" name="exp_date" class="form-control form-control-sm" value="<?= $row['exp_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Driver License <span class="required">*</span></label>
+                <label class="form-label">Driver License :</label>
                 <select name="driver" class="form-select form-select-sm">
                     <option value="NO" <?= $row['driver'] == 'NO' ? 'selected' : '' ?>>NO</option>
                     <option value="A" <?= $row['driver'] == 'A' ? 'selected' : '' ?>>A</option>
@@ -491,7 +487,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Shirt Size <span class="required">*</span></label>
+                <label class="form-label">Shirt Size :</label>
                 <select name="shirt_size" class="form-select form-select-sm">
                     <option value="S" <?= $row['shirt_size'] == 'S' ? 'selected' : '' ?>>S</option>
                     <option value="M" <?= $row['shirt_size'] == 'M' ? 'selected' : '' ?>>M</option>
@@ -501,7 +497,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Labor type <span class="required">*</span></label>
+                <label class="form-label">Labor type :</label>
                 <select name="labor_type" class="form-select form-select-sm">
                     <option value="New" <?= $row['labor_type'] == 'New' ? 'selected' : '' ?>>New</option>
                     <option value="Re-New" <?= $row['labor_type'] == 'Re-New' ? 'selected' : '' ?>>Re-New</option>
@@ -511,7 +507,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຊົນເຜົ່າ <span class="required">*</span></label>
+                <label class="form-label">ຊົນເຜົ່າ :</label>
                 <select name="eth" class="form-select form-select-sm">
                     <?php
                         foreach ($sql_tri as $opt): ?>
@@ -520,11 +516,11 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Agricultural experience <span class="required">*</span></label>
+                <label class="form-label">Agricultural experience :</label>
                 <input type="text" name="agricu" id="agricu" class="form-control form-control-sm" value="<?= $row['agricu'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Interview Location <span class="required">*</span></label>
+                <label class="form-label">Interview Location :</label>
                 <select name="interview_location" class="form-select form-select-sm" required>
                     <option value="Outside" <?= $row['interview_location'] == 'Outside' ? 'selected' : '' ?>>Outside</option>
                     <option value="Inside" <?= $row['interview_location'] == 'Inside' ? 'selected' : '' ?>>Inside</option>
@@ -535,15 +531,15 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Job <span class="required">*</span></label>
+                <label class="form-label">Job :</label>
                 <input type="text" name="job" class="form-control form-control-sm" value="<?= $row['job'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Interview Name <span class="required">*</span></label>
+                <label class="form-label">Interview Name :</label>
                 <input type="text" name="interview_name" class="form-control form-control-sm" value="<?= $row['interview_name'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ແຮງງານ ມີຕົວເລືອກ <span class="required">*</span></label>
+                <label class="form-label">ແຮງງານ ມີຕົວເລືອກ :</label>
                 <select name="list" class="form-select form-select-sm">
                     <option value="ຄົນດຽວ" <?= $row['list_type'] == 'ຄົນດຽວ' ? 'selected' : '' ?>>ຄົນດຽວ</option>
                     <option value="ຄູ່ຜົວ-ເມຍ" <?= $row['list_type'] == 'ຄູ່ຜົວ-ເມຍ' ? 'selected' : '' ?>>ຄູ່ຜົວ-ເມຍ</option>
@@ -559,7 +555,7 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">ແຂວງ <span class="required">*</span></label>
+                <label class="form-label">ແຂວງ :</label>
                 <select name="pro_id" id="pro_id" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <?php foreach ($pro as $proa): ?>
@@ -568,13 +564,13 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ເມືອງ <span class="required">*</span></label>
+                <label class="form-label">ເມືອງ :</label>
                 <select name="dis_id" id="dis_id" class="form-select form-select-sm" data-selected="<?= $row['dis_id'] ?>">
                     <option value="<?= $row['dis_id'] ?>"><?= $row['dis_name_lao'] ?></option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ບ້ານ <span class="required">*</span></label>
+                <label class="form-label">ບ້ານ :</label>
                 <select name="vill_id" id="vill_id" class="form-select form-select-sm" data-selected="<?= $row['vill_id'] ?>">
                     <option value="<?= $row['vill_id'] ?>"><?= $row['vill_name_lao'] ?></option>
                 </select>
@@ -589,7 +585,7 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">ແຂວງ <span class="required">*</span></label>
+                <label class="form-label">ແຂວງ :</label>
                 <select name="pro_id_b" id="pro_id_b" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <?php foreach ($pro as $proa): ?>
@@ -598,13 +594,13 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ເມືອງ <span class="required">*</span></label>
+                <label class="form-label">ເມືອງ :</label>
                 <select name="dis_id_b" id="dis_id_b" class="form-select form-select-sm" data-selected="<?= $row['dis_id_b'] ?>">
                     <option value="<?= $row['dis_id_b'] ?>"><?= $row['dis_name_b'] ?></option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ບ້ານ <span class="required">*</span></label>
+                <label class="form-label">ບ້ານ :</label>
                 <select name="vill_id_b" id="vill_id_b" class="form-select form-select-sm" data-selected="<?= $row['vill_id_b'] ?>">
                     <option value="<?= $row['vill_id_b'] ?>"><?= $row['vill_name_b'] ?></option>
                 </select>
@@ -618,7 +614,7 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 text-center col-sm-6">
-                <label class="form-label fw-bold mb-2">ຮູບພາບ <span class="asterisk">*</span></label>
+                <label class="form-label fw-bold mb-2">ຮູບພາບ :</label>
                 <div class="upload-box" id="box-photo" onclick="document.getElementById('file-photo').click()">
                     <div class="upload-content text-center <?= $row['profile'] ? 'd-none' : '' ?>" id="content-photo" >
                         <div class="icon-circle">
@@ -637,7 +633,7 @@ $sql_tri->execute();
             </div>
 
             <div class="col-12 text-center col-sm-6">
-                <label class="form-label fw-bold mb-2">ຟອມສຳພາດ <span class="asterisk">*</span></label>
+                <label class="form-label fw-bold mb-2">ຟອມສຳພາດ :</label>
                 <div class="upload-box" id="box-interview-form" onclick="document.getElementById('file-interview-form').click()">
                     <div class="upload-content text-center <?= $row['file_form'] ? 'd-none' : '' ?>" id="content-interview-form">
                         <div class="icon-circle">
@@ -726,11 +722,11 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">Health Check date <span class="required">*</span></label>
+                <label class="form-label">Health Check date :</label>
                 <input type="date" name="heal_date" id="heal_date" class="form-control form-control-sm" value="<?= $row['heal_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Diagnose <span class="required">*</span></label>
+                <label class="form-label">Diagnose :</label>
                 <select name="diagnose" id="diagnose" class="form-select form-select-sm">
                     <?php
                     $diag_list = ["(ປົກກະຕິ)","(HIV)","(Virus ຕັບ B)","(ວັນນະໂລກ)","(ຊີຟີລິບ)","(ລົມຊັກ,ບ້າໝູ)","(ພູມແພ້)","(ພູມແພ້ຫອບຫືດ)","(ຕີນຈັງມືຈັງ)","(ເບົາຫວານ)","(ຄວາມດັນ)","(ໂລກຫົວໃຈ)","(ສານເສບຕິດ)","(ຖືພາ)","(ຕາບອດສີ)"];
@@ -740,35 +736,35 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຊື່ຄລີນີກ <span class="required">*</span></label>
+                <label class="form-label">ຊື່ຄລີນີກ :</label>
                 <input type="text" name="clinic" class="form-control form-control-sm" value="<?= $row['clinic'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ວັນທີ່ <span class="required">*</span></label>
+                <label class="form-label">ວັນທີ່ :</label>
                 <input type="date" name="cli_date" class="form-control form-control-sm" value="<?= $row['cli_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຄ່າກວດສຸຂະພາບ <span class="required">*</span></label>
+                <label class="form-label">ຄ່າກວດສຸຂະພາບ :</label>
                 <input type="text" name="check_up" class="form-control form-control-sm" value="<?= number_format($row['check_up'] ?? 0) ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Health Check date2 <span class="required">*</span></label>
+                <label class="form-label">Health Check date2 :</label>
                 <input type="date" name="heal_date2" class="form-control form-control-sm" value="<?= $row['heal_date2'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຄ່າກວດສຸຂະພາບ2 <span class="required">*</span></label>
+                <label class="form-label">ຄ່າກວດສຸຂະພາບ2 :</label>
                 <input type="text" name="check_up2" class="form-control form-control-sm" value="<?= number_format($row['check_up2'] ?? 0) ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Health Check date3 <span class="required">*</span></label>
+                <label class="form-label">Health Check date3 :</label>
                 <input type="date" name="heal_date3" class="form-control form-control-sm" value="<?= $row['heal_date3'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຄ່າກວດສຸຂະພາບ3 <span class="required">*</span></label>
+                <label class="form-label">ຄ່າກວດສຸຂະພາບ3 :</label>
                 <input type="text" name="check_up3" class="form-control form-control-sm" value="<?= number_format($row['check_up3'] ?? 0) ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Remark <span class="required">*</span></label>
+                <label class="form-label">Remark :</label>
                 <input type="text" name="heal_remark" class="form-control form-control-sm" value="<?= $row['heal_remark'] ?>">
             </div>
             <div class="col-12 col-sm-4" style="margin-top:30px;">
@@ -820,7 +816,7 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">ສົ່ງເອກະສານ <span class="required">*</span></label>
+                <label class="form-label">ສົ່ງເອກະສານ :</label>
                 <select name="coll_sts" id="coll_sts" class="form-select form-select-sm">
                     <option value="ຍັງບໍ່ສົ່ງເອກະສານ" <?= $row['coll_sts'] == 'ຍັງບໍ່ສົ່ງເອກະສານ' ? 'selected' : '' ?>>ຍັງບໍ່ສົ່ງເອກະສານ</option>
                     <option value="ສົ່ງເອກະສານແລ້ວ" <?= $row['coll_sts'] == 'ສົ່ງເອກະສານແລ້ວ' ? 'selected' : '' ?>>ສົ່ງເອກະສານແລ້ວ</option>
@@ -829,30 +825,30 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Collateral Type <span class="required">*</span></label>
+                <label class="form-label">Collateral Type :</label>
                 <select name="coll_type" id="coll_type" class="form-select form-select-sm">
                     <option value="ໃບຕາດິນຂອບທອງ" <?= $row['coll_type'] == 'ໃບຕາດິນຂອບທອງ' ? 'selected' : '' ?>>ໃບຕາດິນຂອບທອງ</option>
                     <option value="ໃບຕາດິນນຳໃຊ້" <?= $row['coll_type'] == 'ໃບຕາດິນນຳໃຊ້' ? 'selected' : '' ?>>ໃບຕາດິນນຳໃຊ້</option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Owner <span class="required">*</span></label>
+                <label class="form-label">Owner :</label>
                 <input type="text" name="coll_owner" class="form-control form-select-sm" value="<?= $row['coll_owner'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Area Size <span class="required">*</span></label>
+                <label class="form-label">Area Size :</label>
                 <input type="text" name="coll_area" class="form-control form-select-sm" value="<?= $row['coll_area'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">NO <span class="required">*</span></label>
+                <label class="form-label">NO :</label>
                 <input type="text" name="coll_no" class="form-control form-select-sm" value="<?= $row['coll_no'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Date <span class="required">*</span></label>
+                <label class="form-label">Date :</label>
                 <input type="date" name="coll_date" class="form-control form-select-sm" value="<?= $row['coll_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Valuation of Assets <span class="required">*</span></label>
+                <label class="form-label">Valuation of Assets :</label>
                 <select name="coll_value" id="coll_value" class="form-select form-select-sm">
                     <option value="150,000,000" <?= $row['coll_value'] == '150000000' ? 'selected' : '' ?>>150,000,000</option>
                     <option value="200,000,000" <?= $row['coll_value'] == '200000000' ? 'selected' : '' ?>>200,000,000</option>
@@ -861,7 +857,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ແຂວງ <span class="required">*</span></label>
+                <label class="form-label">ແຂວງ :</label>
                 <select name="coll_pro" id="coll_pro" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <?php foreach ($pro as $proa): ?>
@@ -870,19 +866,19 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ເມືອງ <span class="required">*</span></label>
+                <label class="form-label">ເມືອງ :</label>
                 <select name="coll_dis" id="coll_dis" class="form-select form-select-sm" data-selected="<?= $row['coll_dis'] ?>">
                     <option value="<?= $row['coll_dis'] ?>"><?= $row['dis_name_c'] ?></option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ບ້ານ <span class="required">*</span></label>
+                <label class="form-label">ບ້ານ :</label>
                 <select name="coll_vill" id="coll_vill" class="form-select form-select-sm" data-selected="<?= $row['coll_vill'] ?>">
                     <option value="<?= $row['coll_vill'] ?>"><?= $row['vill_name_c'] ?></option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ຫົວໜ່ວຍ <span class="required">*</span></label>
+                <label class="form-label">ຫົວໜ່ວຍ :</label>
                 <select name="coll_unit" id="coll_unit" class="form-select form-select-sm">
                     <option value="m2" <?= $row['coll_unit'] == 'm2' ? 'selected' : '' ?>>m2</option>
                     <option value="m" <?= $row['coll_unit'] == 'm' ? 'selected' : '' ?>>m</option>
@@ -890,7 +886,7 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">ລະຫັດແຜນທີ່ <span class="required">*</span></label>
+                <label class="form-label">ລະຫັດແຜນທີ່ :</label>
                 <input type="text" name="coll_map" class="form-control form-control-sm" value="<?= $row['coll_map'] ?>">
             </div>
         </div>
@@ -903,39 +899,39 @@ $sql_tri->execute();
     <div class="p-3">
         <div class="row g-3">
             <div class="col-12 col-sm-4">
-                <label class="form-label">Relation <span class="required">*</span></label>
+                <label class="form-label">Relation :</label>
                 <input type="text" name="gua_relation" class="form-control form-control-sm" value="<?= $row['gua_relation'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Lao Name <span class="required">*</span></label>
+                <label class="form-label">Lao Name :</label>
                 <input type="text" name="gua_fname" class="form-control form-control-sm" value="<?= $row['gua_fname'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Phone NO <span class="required">*</span></label>
+                <label class="form-label">Phone NO :</label>
                 <input type="text" name="gua_phone" class="form-control form-control-sm" value="<?= $row['gua_phone'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Date of birth <span class="required">*</span></label>
+                <label class="form-label">Date of birth :</label>
                 <input type="date" name="gua_dob" id="gua_dob" class="form-control form-control-sm" value="<?= $row['gua_dob'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Nationality <span class="required">*</span></label>
+                <label class="form-label">Nationality :</label>
                 <input type="text" name="gua_nationality" class="form-control form-control-sm" value="<?= $row['gua_nationality'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Job <span class="required">*</span></label>
+                <label class="form-label">Job :</label>
                 <input type="text" name="gua_job" class="form-control form-control-sm" value="<?= $row['gua_job'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Age <span class="required">*</span></label>
+                <label class="form-label">Age :</label>
                 <input type="text" name="gua_age" id="gua_age" class="form-control form-control-sm" value="<?= $row['gua_age'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Gender <span class="required">*</span></label>
+                <label class="form-label">Gender :</label>
                 <input type="text" name="gua_gender" class="form-control form-control-sm" value="<?= $row['gua_gender'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Province <span class="required">*</span></label>
+                <label class="form-label">Province :</label>
                 <select name="gua_pro" id="gua_pro" class="form-select form-select-sm">
                     <option value="">ເລືອກ</option>
                     <?php foreach ($pro as $proa): ?>
@@ -944,29 +940,29 @@ $sql_tri->execute();
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Family Book NO <span class="required">*</span></label>
+                <label class="form-label">Family Book NO :</label>
                 <input type="text" name="gua_book" class="form-control form-control-sm" value="<?= $row['gua_book'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Family Book date <span class="required">*</span></label>
+                <label class="form-label">Family Book date :</label>
                 <input type="text" name="gua_book_date" class="form-control form-control-sm" value="<?= $row['gua_book_date'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">District <span class="required">*</span></label>
+                <label class="form-label">District :</label>
                 <select name="gua_dis" id="gua_dis" class="form-select form-select-sm" data-selected="<?= $row['gua_dis'] ?>">
                     <option value="<?= $row['gua_dis'] ?>"><?= $row['dis_name_d'] ?></option>
                 </select>
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Unit <span class="required">*</span></label>
+                <label class="form-label">Unit :</label>
                 <input type="text" name="gua_unit" class="form-control form-control-sm" value="<?= $row['gua_unit'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Home NO <span class="required">*</span></label>
+                <label class="form-label">Home NO :</label>
                 <input type="text" name="gua_home" class="form-control form-control-sm" value="<?= $row['gua_home'] ?>">
             </div>
             <div class="col-12 col-sm-4">
-                <label class="form-label">Village <span class="required">*</span></label>
+                <label class="form-label">Village :</label>
                 <select name="gua_vill" id="gua_vill" class="form-select form-select-sm" data-selected="<?= $row['gua_vill'] ?>">
                     <option value="<?= $row['gua_vill'] ?>"><?= $row['dis_name_d'] ?></option>
                 </select>

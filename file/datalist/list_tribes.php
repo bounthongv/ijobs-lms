@@ -38,26 +38,22 @@ if(!in_array('0504', $item_ids)){
     exit();
 }
   $all = $_REQUEST['all'] ?? '';
-  $pro_id = $_REQUEST['s_pro_id'] ?? '';
-  $dis_id = $_REQUEST['s_dis_id'] ?? '';
 
   //search
-  $p1 = $all == '' ? '' : "AND (vill_name LIKE '%$all%' OR vill_name_lao LIKE '%$all%' OR vill_id LIKE '%$all%' )";
-  $p2 = $pro_id != '' ? "AND vill.pro_id = '$pro_id' " :'';
-  $p3 = $dis_id != '' ? "AND vill.dis_id = '$dis_id' " :'';
+  $p1 = $all == '' ? '' : "AND (tri_name LIKE '%$all%' OR tri_name_eng LIKE '%$all%')";
 
   // ພາກສ່ວນການປ່ຽນໜ້າ
   $limit = 500;
   $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
   $offset = ($page - 1) * $limit;
   $sql = $conn->prepare("SELECT * FROM tribes
-  WHERE 1=1 $p1 $p2 $p3
+  WHERE 1=1 $p1 
   ORDER BY tri_id ASC
   LIMIT $limit OFFSET $offset");
   $sql->execute();
   // ດືງຂໍ້ມູນທັງໝົດເພື່ອຄຳນວນຈຳນວນໜ້າ
   $total_result = $conn->prepare("SELECT COUNT(*) as total  FROM tribes
-  WHERE 1=1 $p1 $p2 $p3");
+  WHERE 1=1 $p1 ");
   $total_result->execute();
   $total_row = $total_result->fetch(PDO::FETCH_ASSOC);
   $total_pages = ceil($total_row['total'] / $limit);
@@ -67,15 +63,9 @@ if(!in_array('0504', $item_ids)){
 
   // total
   $sql_total = $conn->prepare("SELECT COUNT(*) FROM tribes
-  WHERE 1=1 $p1 $p2 $p3");
+  WHERE 1=1 $p1 ");
   $sql_total->execute();
   $total = $sql_total->fetch(PDO::FETCH_NUM)[0];
-  $sql_pro = $conn->prepare("SELECT * FROM province");
-  $sql_pro->execute();
-  $pro = $sql_pro->fetchAll(PDO::FETCH_ASSOC);
-  $dis = $conn->prepare("SELECT * FROM district");
-  $dis->execute();
-  $dis = $dis->fetchAll(PDO::FETCH_ASSOC);
 
   $sql_max = $conn->prepare("SELECT MAX(tri_id) FROM tribes");
   $sql_max->execute();
@@ -119,21 +109,6 @@ if(!in_array('0504', $item_ids)){
       <div class="col-md-4 filter-group">
           <label for="all">ຄົ້ນຫາ</label>
           <input type="text" name="all" id="all" placeholder="🔍 ຄົ້ນຫາຊື່ ຊົນເຜົ່າ...." value="<?= $all ?>">
-      </div>
-      <div class="col-md-2 filter-group">
-          <label for="all">ແຂວງ</label>
-          <select name="s_pro_id" id="s_pro_id" class="form-select">
-            <option value="">ເລືອກ</option>
-            <?php foreach($pro as $p): ?>
-              <option value="<?= $p['pro_id'] ?>" <?= $pro_id == $p['pro_id'] ? 'selected' : '' ?>><?= $p['pro_name_lao'] ?></option>
-            <?php endforeach ?>
-          </select>
-      </div>
-      <div class="col-md-2 filter-group">
-          <label for="all">ເມືອງ</label>
-          <select name="s_dis_id" id="s_dis_id" class="form-select" data-selected="<?= $dis_id ?>">
-            <option value="">ເລືອກ</option>
-          </select>
       </div>
       <div class="col-md-2 filter-group btn-mt">
           <button type="submit" class="btn btn-secondary btn-sm"><i class="bi bi-search"></i> Search</button>

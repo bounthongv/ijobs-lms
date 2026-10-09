@@ -1,0 +1,433 @@
+/* ກຳນົດຕົວແປສີກາງຂອງລະບົບ */
+:root {
+  --lms-blue-dark: #1e40af;
+  --lms-blue: #2563c7;
+  --lms-blue-light: #eef4ff;
+  --lms-text: #172554;
+  --lms-muted: #64748b;
+  --lms-border: #e4eaf3;
+  --lms-surface: #ffffff;
+  --lms-page: #f7f9fc;
+  --lms-radius: 12px;
+  --lms-shadow: 0 3px 12px rgba(30, 64, 175, .06);
+}
+
+/* ປັບຮູບແບບພື້ນຖານຂອງລະບົບ */
+body {
+  background: var(--lms-page);
+  color: var(--lms-text);
+}
+
+/* ປັບເມນູ Sidebar ໃຫ້ສະໝ່ຳສະເໝີ */
+#sidebar .nav-item {
+  min-height: 46px;
+  border-radius: 9px;
+  margin: 2px 10px;
+  padding: 11px 15px;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+#sidebar .nav-item:hover {
+  transform: translateX(2px);
+}
+
+#sidebar .nav-item.active {
+  background: rgba(255, 255, 255, .18);
+  box-shadow: inset 3px 0 0 #ffffff;
+  margin-left: 10px;
+}
+
+#sidebar .nav-subitem {
+  padding-left: 48px;
+  min-height: 40px;
+  font-size: 13px;
+}
+
+#sidebar .nav-flag {
+  width: 23px;
+  height: 17px;
+}
+
+#sidebar .nav-icon {
+  flex: 0 0 23px;
+  font-size: 18px;
+  text-align: center;
+}
+
+/* ປັບ Topbar ໃຫ້ສະອາດ ແລະ ໃຊ້ງານງ່າຍ */
+.topbar {
+  box-shadow: 0 1px 0 rgba(15, 23, 42, .03);
+}
+
+.system-menu-tabs {
+  align-items: center;
+  display: flex;
+  max-width: none;
+  overflow: visible;
+  position: relative;
+  z-index: 1050;
+}
+
+.system-menu-tabs .tab-btn {
+  font-size: 13px;
+  padding: 0 14px;
+}
+
+.system-menu-tabs .dropdown,
+.system-menu-tabs .dropdown-menu {
+  z-index: 1060;
+}
+
+.system-menu-tabs .dropdown-menu {
+  display: none;
+}
+
+.system-menu-tabs .dropdown-menu.show {
+  display: block;
+}
+
+/* ຮູບແບບກ່ອງເນື້ອຫາກາງ */
+.dash-card,
+.app-card,
+.card,
+.modal-content {
+  border: 1px solid var(--lms-border);
+  border-radius: var(--lms-radius);
+  box-shadow: var(--lms-shadow);
+}
+
+.dash-card,
+.app-card {
+  background: var(--lms-surface);
+}
+
+/* ປັບຫົວຂໍ້ໜ້າ */
+.page-header,
+.dash-header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.dash-title {
+  color: var(--lms-text);
+  font-weight: 700;
+  margin: 0;
+}
+
+.page-header p,
+.page-subtitle,
+.dash-sub {
+  color: var(--lms-muted);
+  margin: 4px 0 0;
+}
+
+/* ປັບປຸງປຸ່ມການເຮັດວຽກ */
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background-color: var(--lms-blue);
+  border-color: var(--lms-blue);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--lms-blue-dark);
+  border-color: var(--lms-blue-dark);
+}
+
+.btn-edit,
+.btn-del,
+.btn-action {
+  align-items: center;
+  border: 1px solid var(--lms-border);
+  border-radius: 7px;
+  display: inline-flex;
+  gap: 5px;
+  justify-content: center;
+  min-height: 32px;
+  padding: 5px 10px;
+  transition: all .15s ease;
+}
+
+.btn-edit,
+.btn-action {
+  background: var(--lms-blue-light);
+  color: var(--lms-blue-dark);
+}
+
+.btn-edit:hover,
+.btn-action:hover {
+  background: var(--lms-blue);
+  color: #fff;
+}
+
+.btn-del {
+  background: #fff5f5;
+  color: #c0392b;
+}
+
+.btn-del:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* ປັບຮູບແບບຕາຕະລາງ */
+.table-responsive {
+  border-radius: 9px;
+}
+
+table.usr-table,
+table.data-table,
+table.recent-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table.usr-table thead th,
+table.data-table thead th {
+  background: #f5f8fe;
+  border-bottom: 1px solid var(--lms-border);
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 11px 12px;
+  white-space: nowrap;
+}
+
+table.usr-table tbody td,
+table.data-table tbody td {
+  border-bottom: 1px solid #edf1f6;
+  color: #475569;
+  font-size: 13px;
+  padding: 11px 12px;
+  vertical-align: middle;
+}
+
+table.usr-table tbody tr:hover,
+table.data-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* ປັບຟອມ ແລະ ຊ່ອງປ້ອນຂໍ້ມູນ */
+.form-label,
+form label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select,
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  border: 1px solid #d7dfeb;
+  border-radius: 8px;
+  color: #1e293b;
+  font-size: 13px;
+  min-height: 40px;
+  padding: 8px 11px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+textarea.form-control,
+textarea {
+  min-height: 90px;
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--lms-blue);
+  box-shadow: 0 0 0 .2rem rgba(37, 99, 199, .12);
+}
+
+.form-check-input:checked {
+  background-color: var(--lms-blue);
+  border-color: var(--lms-blue);
+}
+
+/* ປັບ Modal ແລະ ສ່ວນຫົວຂອງ Modal */
+.modal-header {
+  background: #f7faff;
+  border-bottom-color: var(--lms-border);
+  padding: 15px 18px;
+}
+
+.modal-title {
+  color: var(--lms-text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.modal-body {
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.modal-footer {
+  border-top-color: var(--lms-border);
+  padding: 12px 18px;
+}
+
+/* ປັບ Badge ສະຖານະ */
+.badge {
+  border-radius: 6px;
+  font-weight: 600;
+  padding: .35rem .55rem;
+}
+
+/* ປັບສະຖານະບໍ່ມີຂໍ້ມູນ */
+.empty-state,
+#emptyMsg {
+  color: #94a3b8;
+  padding: 38px 20px;
+  text-align: center;
+}
+
+/* ປັບສະຖານະກຳລັງໂຫຼດ */
+.loading-state {
+  align-items: center;
+  color: var(--lms-muted);
+  display: flex;
+  justify-content: center;
+  min-height: 160px;
+}
+
+/* ປັບການໃຊ້ງານໃນມືຖື */
+@media (max-width: 768px) {
+  #main-content .container-fluid {
+    padding: 16px !important;
+  }
+
+  .page-header,
+  .dash-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-header .btn,
+  .dash-header .btn {
+    width: 100%;
+  }
+
+  .modal-dialog {
+    margin: .5rem;
+  }
+
+  .modal-body {
+    max-height: calc(100vh - 170px);
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-left { padding-left: 8px !important; }
+  .topbar-divider { margin-left: 3px !important; margin-right: 8px !important; }
+  .topbar-breadcrumb { font-size: 12px !important; }
+  .system-menu-tabs { display: none !important; }
+  .summary-card { min-height: 88px; }
+  .summary-value { font-size: 1.25rem; }
+}
+
+/* ປັບໜ້າ Login ໃຫ້ເຂົ້າກັບ Theme ຂອງລະບົບ */
+.login-container {
+  border: 1px solid rgba(228, 234, 243, .95);
+  box-shadow: 0 18px 45px rgba(30, 64, 175, .16);
+  max-width: 420px;
+}
+
+.login-container .logo-area h1 {
+  color: var(--lms-text);
+  font-size: 1.35rem;
+  line-height: 1.45;
+}
+
+.login-container .form-group input {
+  border: 1px solid #d7dfeb;
+  border-radius: 8px;
+}
+
+.login-container .login-button {
+  background: var(--lms-blue);
+  border-radius: 8px;
+}
+
+.login-container .login-button:hover {
+  background: var(--lms-blue-dark);
+}
+
+/* ປັບຮູບແບບປຸ່ມ Search ໂດຍບໍ່ປ່ຽນສີ Theme ເດີມ */
+.filter-bar .btn-secondary,
+.filter-bar .btn-search,
+.btn-mt .btn,
+.btn-search,
+.btn:has(> .bi-search) {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 7px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+
+.filter-bar .btn-secondary:hover,
+.filter-bar .btn-search:hover,
+.btn-mt .btn:hover,
+.btn-search:hover,
+.btn:has(> .bi-search):hover {
+  box-shadow: 0 4px 10px rgba(15, 23, 42, .12);
+  transform: translateY(-1px);
+}
+
+.filter-bar .btn-secondary:focus,
+.filter-bar .btn-search:focus,
+.btn-mt .btn:focus,
+.btn-search:focus,
+.btn:has(> .bi-search):focus {
+  box-shadow: 0 0 0 .2rem rgba(100, 116, 139, .18);
+}
+
+.filter-bar .btn-secondary .bi-search,
+.filter-bar .btn-search .bi-search,
+.btn-mt .btn .bi-search,
+.btn-search .bi-search,
+.btn:has(> .bi-search) > .bi-search {
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  .btn-mt .btn,
+  .filter-bar .btn-secondary,
+  .filter-bar .btn-search,
+  .btn-search {
+    width: 100%;
+  }
+}

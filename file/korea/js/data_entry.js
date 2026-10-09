@@ -19,7 +19,7 @@ $(document).ready(function() {
 
         } else {
 
-            // ລຶບ Active ອອກຈາກປຸ່ມອື່ນ ແລ້ວໃສ່ໃຫ້ປຸ່ມທີ່ຖືກກົດ
+            // ລົບ Active ອອກຈາກປຸ່ມອື່ນ ແລ້ວໃສ່ໃຫ້ປຸ່ມທີ່ຖືກກົດ
             $actionButtons.removeClass("active");
             $this.addClass("active");
 

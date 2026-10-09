@@ -387,7 +387,7 @@
                                     <div class="d-flex justify-content-between mt-2">
                                         <span class="text-muted-custom align-self-center">ໃຊ້ເມົ້າ ຫຼື ນິ້ວມືເຊ็นໃສ່ຫ້ອງຂາວ</span>
                                         <button type="button" class="btn btn-sm btn-outline-danger" id="clear-canvas">
-                                            <i class="bi bi-trash3-fill"></i> ລຶບໃໝ่
+                                            <i class="bi bi-trash3-fill"></i> ລົບໃໝ่
                                         </button>
                                     </div>
                                     <input type="hidden" name="cit_sig_canvas" id="cit_sig_canvas">
